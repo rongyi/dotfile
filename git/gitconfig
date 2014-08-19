@@ -1,0 +1,26 @@
+[alias]
+	ls = status -sb
+	cm = commit
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
+	co = checkout
+[core]
+	ediotr = vim
+	autocrlf = input
+	fileMode = false
+	editor = vim -c 'startinsert'
+[user]
+	name = rongyi
+	email = TODO
+[color]
+	ui = true
+[branch]
+	autosetuprebase = always
+[pull]
+	rebase = true
+[push]
+	default = upstream
+[diff]
+	guitool = meld
+	tool = meld
+[difftool]
+	prompt = false

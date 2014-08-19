@@ -1,0 +1,24 @@
+# Object files
+*.o
+*.lib
+*.a
+*.so
+*.so.*
+*.i*86
+*.x86_64
+
+.ycm_extra_conf.py
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+# Distribution / packaging
+*.egg
+*.pyc
+
+
+# Translations
+*.mo
+
+
+

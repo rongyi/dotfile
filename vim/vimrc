@@ -1,0 +1,275 @@
+" _ __ _   _     __   _(_)_ __ ___  _ __ ___
+"| '__| | | |____\ \ / / | '_ ` _ \| '__/ __|
+"| |  | |_| |_____\ V /| | | | | | | | | (__
+"|_|   \__, |      \_/ |_|_| |_| |_|_|  \___|
+"      |___/
+"
+
+"pathoegn
+execute pathogen#infect()
+syntax on
+filetype plugin indent on
+
+" Make sure colored syntax mode is on, and make it Just Work with newer 256
+" color terminals like iTerm2.
+if !has('gui_running')
+  if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal"
+    set t_Co=256
+    colorscheme Tomorrow-Night-Eighties
+  elseif has("terminfo")
+    colorscheme default
+    set t_Co=8
+    set t_Sf=[3%p1%dm
+    set t_Sb=[4%p1%dm
+  else
+    colorscheme default
+    set t_Co=8
+    set t_Sf=[3%dm
+    set t_Sb=[4%dm
+  endif
+endif
+
+
+" ==============Vim Option============
+set nocompatible      "don't make any effort to be compatible with vi
+set clipboard=unnamed "use system default clipboard
+set mousehide         "hide mouse when typing
+set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936
+set linespace=4
+set ruler             "show line info in status line
+set cursorline        "highlight current line
+set tabstop=2         " default indentation option
+set shiftwidth=2
+set softtabstop=2
+set expandtab
+set autoindent
+set autoread                   " auto update file content edited by another program at the same time
+set autowrite                  " Write on :next/:prev/^Z
+set swapfile                   " store tmp file in another place
+set directory^=~/tmp/swap//
+set notitle                    " Don't set the title of the Vim window, pure environment
+set backspace=indent,eol,start " backspace over pretty much anything
+set ignorecase                 " search option
+set incsearch
+set hlsearch
+set smartcase                  " UPPER case search only match upper case
+set paste
+set list    " show trailing whitespace
+set listchars=tab:▸\ ,trail:▫
+set tags=./tags;/ "search tag file from current dir to root
+set showmatch " Hilight matching braces/paren/etc
+set shortmess+=A " Don't bother me when a swapfile exists
+
+" Make tab completion for files/buffers act like bash
+set wildmenu
+set wildignore+=*.o,*~,*.pyc,.git,node_modules  " Ignore certain files in tab-completion
+" Disable archive files
+set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz
+" Use emacs-style tab completion when selecting files, etc
+set wildmode=longest,list
+set wrap " Enable wrapping
+set linebreak " Break long lines by word, not char
+set showbreak=↪\  " Character to precede line wraps
+silent! set mouse=nvc       " Use the mouse, but not in insert mode
+" none of these should be word dividers, so make them not be
+set iskeyword+=_,$,@,%,#
+set formatoptions=l
+set lbr
+" Don't reset cursor to start of line when moving around
+set nostartofline
+" without this setting, 7.4 is so slow
+set regexpengine=1
+
+" http://stackoverflow.com/questions/1005/getting-root-permissions-on-a-file-inside-of-vi
+cmap w!! w !sudo tee >/dev/null %
+
+"leader setting
+let mapleader=','
+
+" ================personal shortcut================
+"set nu "line number, it seems ok when no line number for a while
+"toggle number, in case needed
+nmap \l :setlocal number!<CR>:setlocal number?<CR>
+"indent regular setting
+nmap \t :set expandtab tabstop=4 shiftwidth=4 softtabstop=4<CR>
+"adapt to emacs or google c++ coding style
+nmap \m :set expandtab tabstop=2 shiftwidth=2 softtabstop=2<CR>
+
+"this two key's default binding are rarely used
+"(<C-f><C-b> is enough for me)
+"remap to the function we need: multibuffer switch,
+"if you open too much buffers, use Kwbd to close these buffer
+"buffer switch is so slow so we change back to tab
+map <C-e> :tabnext<CR>
+map <C-y> :tabprevious<CR>
+
+" in case miss type
+map Q <silent>
+map q: <silent>
+map K <silent>
+"a switch to disable hightlight search result
+nmap \q     :nohlsearch<CR>
+map  <C-s>  :w<CR>
+imap <C-s>  <ESC>:w<CR>a
+"like Intellij IDEA
+map  <C-F4> :wqall<CR>
+imap <C-F4> <ESC>:wqall<CR>
+" some emacs like key bindings
+imap <C-f>         <Right>
+imap <C-e>         <End>
+imap <C-b>         <Left>
+imap <C-a>         <Home>
+imap <A-x>         <ESC>:
+nmap <A-x>         <ESC>:
+imap <C-backspace> <C-w>
+"You should notice we use 'b' for mark anchor
+nmap     <C-l>         mbz.`b
+inoremap <C-l>         <ESC>mbz.`ba
+"tab switch shortcut
+map <F8> :bnext<CR>
+map <F7> :bprevious<CR>
+"quick quit
+nnoremap <silent><leader>z :wq<CR>
+"quick copy/paste, often you should select before
+map <leader>c "+y
+map <leader>p "+p
+" delete all trailing spaces in all lines
+nmap <leader><space> :call whitespace#strip_trailing()<CR>
+" reselect visual block after indent
+vnoremap < <gv
+vnoremap > >gv
+
+" hide annoying quit message
+nnoremap <C-c> <C-c>:echo<cr>
+
+
+" ============== plugin specific config====================
+
+"airline
+let g:airline_powerline_fonts            = 1
+let g:airline_enable_branch              = 1
+" see airline doc for more theme name
+let g:airline_theme                      = 'luna'
+" Automatically displays all buffers when there's only one tab open.
+"let g:airline#extensions#tabline#enabled = 1
+"let g:airline#extensions#tabline#left_sep = ' '
+"let g:airline#extensions#tabline#left_alt_sep = '|'
+
+" ctrlp
+
+" Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
+if executable('ag')
+  let g:ackprg = 'ag --nogroup --column'
+
+  " Use Ag over Grep
+  set grepprg=ag\ --nogroup\ --nocolor
+
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+endif
+
+
+let g:ctrlp_map = '<c-p>'
+" like emacs buffer shortcut, the more the same shortcut, the less brain memory we need
+nnoremap <silent> <C-x><C-f> :CtrlP<CR>
+nnoremap <silent> <C-x><C-b> :CtrlPBuffer<CR>
+nnoremap <silent> <C-x><C-r> :CtrlPMRU<CR>
+"add <c-n> <c-p> for selecting
+let g:ctrlp_prompt_mappings = {
+    \ 'PrtSelectMove("j")':   ['<c-j>', '<c-n>'],
+    \ 'PrtSelectMove("k")':   ['<c-k>', '<c-p>'],
+    \ 'PrtHistory(-1)':       ['<down>'],
+    \ 'PrtHistory(1)':        ['<up>'],
+    \ 'PrtClearCache()':      ['<F2>'],
+    \ 'AcceptSelection("e")': ['<c-t>'],
+    \ 'AcceptSelection("t")': ['<cr>', '<2-LeftMouse>'],
+    \ }
+let g:ctrlp_custom_ignore       = '\v\~$|\.(o|swp|pyc|)$|(^|[/\\])\.(hg|git|bzr)($|[/\\])|__init__\.py'
+" open tab after the last, just like browser does
+let g:ctrlp_tabpage_position    = 'al'
+" open in tab as default, seems ctrlp has bug
+" let g:CommandTAcceptSelectionTabMap = '<CR>'
+" set working directory as git repo root
+let g:ctrlp_working_path_mode   = 'ra'
+" open newly created file in tab when open with <c-y>
+let g:ctrlp_open_new_file       = 't'
+" open multi selected file in tab when open with <c-o>
+let g:ctrlp_open_multiple_files = 't'
+
+
+" easy motion
+let g:EasyMotion_leader_key = ','
+
+" tagbar
+let g:tagbar_expand = 1
+" close tagbar when we jump to code
+let g:tagbar_autoclose = 1
+" auto focus when we open tagbar
+let g:tagbar_autofocus = 1
+nmap \e :TagbarToggle<CR>
+
+" nerdtree
+let g:NERDTreeMapJumpNextSibling = '<C-n>'
+let g:NERDTreeMapJumpPrevSibling = '<C-p>'
+nmap \n :NERDTreeToggle<CR>
+
+" restore session
+set viewoptions=cursor,folds,slash,unix
+
+" ultisnip integrate with YCM, remap expand key
+" just like Emacs hippie expand
+let g:UltiSnipsExpandTrigger       = '<M-/>'
+let g:UltiSnipsJumpForwardTrigger  = '<M-j>'
+let g:UltiSnipsJumpBackwardTrigger = '<M-k>'
+" Who need to list all snip anyway?
+"let g:UltiSnipsListSnippets        = '<c-m-s>'
+
+" syntasitic
+let g:syntastic_error_symbol = '✗'
+let g:syntastic_warning_symbol = '∆'
+let g:syntastic_style_error_symbol = '✠'
+let g:syntastic_style_warning_symbol = '≈'
+let g:syntastic_always_populate_loc_list = 1
+" specify python checker, you need install it via `pip install flake8` first.
+let g:syntastic_python_checkers = ['flake8']
+let g:syntastic_python_flake8_args = '--select=F,C9 --max-complexity=10'
+
+" ag(silver_searcher) vim bundle
+" bind a shorcut for using silver_search to search the word under cursor
+nmap <C-k> :Ag "\b<cword>\b" <CR>
+
+" Use <F9>/<F10> to iter in quickfix or :Ag serach result.
+nmap <F9> :cnext<CR>
+nmap <F10> :cprevious<CR>
+
+" Kwbd
+"quick close current buffer
+nmap <leader>x <Plug>Kwbd
+"quick close all other buffer, when open alot using ctags, this is very handy
+nmap <leader>X :CloseHiddenBuffers<CR>
+
+"git gutter
+"nmap <leader>g :GitGutterToggle<CR>
+let g:gitgutter_enabled = 0
+
+"vim easy align
+vnoremap <silent> <Enter> :EasyAlign<Enter>
+
+"YouCompleteMe
+"let g:ycm_global_ycm_extra_conf = '/home/ry/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
+""make ycm do not show the preview window, it's nosing
+set completeopt-=preview
+let g:ycm_add_preview_to_completeopt = 0
+let g:ycm_autoclose_preview_window_after_completion = 0
+let g:ycm_confirm_extra_conf = 0
+
+let g:ycm_key_invoke_completion = '<C-Space>'
+nnoremap <leader>y :YcmForceCompileAndDiagnostics<cr>
+nnoremap <leader>pg :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nnoremap <leader>pd :YcmCompleter GoToDefinition<CR>
+nnoremap <leader>pc :YcmCompleter GoToDeclaration<CR>
+
+"indent line
+let g:indentLine_char = '┆'
+" needed only in python code, disable it by default
+let g:indentLine_enabled = 0

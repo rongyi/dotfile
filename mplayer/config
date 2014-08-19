@@ -1,0 +1,27 @@
+
+[default]
+## Write your default config options here!
+##vf=noformat=yv12
+#monitoraspect=5:4#调整为适合自己机子的数字
+#ao=alsa #音频驱动选择，我一般选择alsa，其他的（比如pulse)好像会出现声道不能共享
+#vo=xv #视频驱动选择,也可以选择x11、gl等
+#vo=fbdev #在字符终端播放视频
+##joystick=0 #是否支持手柄控制
+stop-xscreensaver=no #是否允许播放视频时出现屏保
+monitoraspect=1440:900 #识别桌面分辨率为1280×800
+zoom=yes  #是否允许视频缩放
+subcp=cp936#字幕字符集编码，也可以设置为utf8，这不是最主要的，最主要的是字幕文件的编码，字幕文件的编码如果是utf8的，subcp设置为gbk、gb2312、utf8都可以
+subfont-autoscale=1 #设置按什么方法来进行自动缩放字幕，0－不自动缩放，1－按电影高度缩放，2－按电影宽度缩放，3－按电影对角线缩放(默认值)
+subfont-text-scale=5 #设置字幕文本的自动缩放系数(屏幕尺寸的百分比)，值范围为0～100，默认值为5。
+subfont-osd-scale=8 #OSD字幕的自动缩放系统(屏幕尺寸的百分比)，值范围为0～100，默认值为6。
+font="微軟正黑體"#选择字幕用的字体，我的subfont.ttf是一个链接到/usr/share/fonts/truetype/下面的一个中文字体，比如msyh.ttf
+overlapsub=1 #支持多语言字幕。
+sub-fuzziness=1 #设定字幕自动加载的识别，播放时可以通过j键切换。
+vf=expand=:::::16/9:2 #如果是16:9的影片，字幕显示在画面下的黑色部分
+#osdlevel=1 #在屏幕的左上角显示相应时间等,可以在播放时单击o键显示播放时间
+#cache = 8192 #此选项指定用多少内存(以 kBytes 为单位)作为播放文件或 URL 的预缓冲。
+#
+#
+
+[gnome-mplayer]
+msglevel=all=5

@@ -1,0 +1,55 @@
+set background=light
+color solarized
+nmap \b :colorscheme Tomorrow-Night-Eighties <CR>
+
+set lines=35 columns=93
+" With this, the gui (gvim and macvim) now doesn't have the toolbar, the left
+" and right scrollbars and the menu.
+set guioptions-=T
+set guioptions-=l
+set guioptions-=L
+set guioptions-=r
+set guioptions-=R
+set guioptions-=m
+set guioptions-=M
+
+" enforces a specified line-length and auto inserts hard line breaks when we
+" reach the limit; in Normal mode, you can reformat the current paragraph with
+" gqap.
+set textwidth=80
+
+" this makes the color after the textwidth column highlighted, useful in c code
+set colorcolumn=+1
+" when editing html or javascript the vertical line is very ugly
+
+function! g:ToggleColorColumn()
+    if &colorcolumn != ''
+        setlocal colorcolumn&
+    else
+        setlocal colorcolumn=+1
+    endif
+endfunction
+
+nmap \c :call g:ToggleColorColumn()<CR>
+
+set guifont=Source\ Code\ Pro\ for\ Powerline\ 10,Fixed\ 10
+set guifontwide=Microsoft\ JhengHei\ 10,WenQuanYi\ Zen\ Hei\ 10
+
+set laststatus=2
+set winaltkeys=no
+" turn off the blinking cursor in normal mode
+set guicursor+=a:blinkon0
+
+" my display's resolution is 1440*900
+winpos 720 6
+
+" Tab tooltip format
+set guitabtooltip=%F
+
+" Tab label format
+set guitablabel=%N\ %t\ %m
+
+"C short cut <alt-.>
+imap ® ->
+"add & in a -> expression
+imap <c-y> <ESC>bbbi&<ESC>f)i

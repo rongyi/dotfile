@@ -1,0 +1,10 @@
+* Description
+  My dot file save place.
+** Vim directory
+   I use pathogen for Vim plugin management, so I need to save the repo list by myself.
+
+** fonts
+  some powerline patched fonts can be found in [here](http://yun.baidu.com/s/1ntFkrXJ)
+
+
+
