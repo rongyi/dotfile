@@ -3,14 +3,15 @@
 cp ./gitignore ~/.gitignore
 #basic
 git config --global user.name "rongyi"
-git config --global user.email "yi.rong@yamutech.com"
+git config --global user.email "rongyi@ucloud.cn"
 git config --global color.ui true
 #ignore file perm change
 git config --global core.fileMode false
-#put vim open with insert mode, if you like Emacs,
-#you can use 'emacsclient -c' instead
+#put vim open with insert mode, so that I can input commit message fast, if you like Emacs,
+#you can use 'emacsclient -c' instead, but you beter start a Emacs daemon first.
 git config --global core.editor vim -c 'startinsert'
-git config --global http.proxy '192.168.1.99:8762'
+# OMG! you need proxy to access git repo?
+#git config --global http.proxy '192.168.1.99:8762'
 #alias
 git config --global alias.ls 'status -sb'
 git config --global alias.cm commit
