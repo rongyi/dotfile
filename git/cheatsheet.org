@@ -1,4 +1,0 @@
-* 找出一个committer修改过的所有的文件
-  #+BEGIN_SRC bash
-  git log --no-merges --stat --author="rongyi" --name-only --pretty=format:""
-  #+END_SRC
