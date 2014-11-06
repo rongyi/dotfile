@@ -1,7 +1,6 @@
-* Description
-  My dot file save place.
-** Vim directory
-   I use pathogen for Vim plugin management, so I need to save the repo list by myself.
-
-** fonts
-  some powerline patched fonts can be found in [[http://yun.baidu.com/share/link?shareid%3D1642627464&uk%3D1461734383][here]].
+* Description:
+  dot file of
+  + shell(zsh)
+  + vim
+  + mplayer
+  + emacs
