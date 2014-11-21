@@ -98,7 +98,8 @@
 (slime-setup '(slime-fancy))
 ;; rainbow delimeter
 (require-package 'rainbow-delimiters)
-(global-rainbow-delimiters-mode)
+;;(global-rainbow-delimiters-mode)
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
 ;; web-mode
 (require-package 'web-mode)
