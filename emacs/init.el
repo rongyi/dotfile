@@ -613,6 +613,11 @@ This functions should be added to the hooks of major modes for porgramming."
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/org/contrib/lisp" t))
 
 
+(require 'powerline)
+(powerline-default-theme)
+(setq powerline-default-separator 'slant)
+
+
 
 (provide 'init)
 ;;; init.el ends here
