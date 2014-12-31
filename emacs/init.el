@@ -43,6 +43,7 @@
                ac-source-words-in-all-buffer))
 (ac-config-default)
 (global-auto-complete-mode t)
+(global-set-key (kbd "M-C-I") 'ac-fuzzy-complete)
 
 ;; helm
 (require-package 'helm)
@@ -61,8 +62,35 @@
 
 ;; evil mode, uncomment if you like
 ;; (add-to-list 'load-path "~/.emacs.d/github/evil")
-;; (require 'evil)
-;; (evil-mode 1)
+(require 'evil)
+(evil-mode 1)
+(define-key evil-insert-state-map "\C-c" 'evil-normal-state)
+(define-key evil-normal-state-map "\C-e" 'evil-end-of-line)
+(define-key evil-insert-state-map "\C-e" 'end-of-line)
+(define-key evil-insert-state-map "\C-s" 'save-buffer)
+(define-key evil-insert-state-map "\C-k" 'kill-line)
+(define-key evil-normal-state-map "\C-s" 'save-buffer)
+(define-key evil-visual-state-map "\C-e" 'evil-end-of-line)
+(define-key evil-motion-state-map "\C-e" 'evil-end-of-line)
+(define-key evil-normal-state-map "\C-f" 'evil-scroll-page-down)
+(define-key evil-insert-state-map "\C-f" 'forward-char)
+(define-key evil-insert-state-map "\C-f" 'evil-forward-char)
+(define-key evil-normal-state-map "\C-b" 'evil-scroll-page-up)
+(define-key evil-insert-state-map "\C-b" 'backward-char)
+(define-key evil-visual-state-map "\C-b" 'evil-backward-char)
+(define-key evil-normal-state-map "\C-d" 'evil-delete-char)
+(define-key evil-insert-state-map "\C-d" 'evil-delete-char)
+(define-key evil-visual-state-map "\C-d" 'evil-delete-char)
+(define-key evil-normal-state-map "\C-n" 'evil-next-line)
+(define-key evil-insert-state-map "\C-n" 'evil-next-line)
+(define-key evil-visual-state-map "\C-n" 'evil-next-line)
+(define-key evil-normal-state-map "\C-p" 'evil-previous-line)
+(define-key evil-insert-state-map "\C-p" 'evil-previous-line)
+(define-key evil-visual-state-map "\C-p" 'evil-previous-line)
+(define-key evil-normal-state-map "\C-w" 'evil-delete)
+(define-key evil-insert-state-map "\C-w" 'evil-delete)
+(define-key evil-visual-state-map "\C-w" 'evil-delete)
+
 
 ;; expand region
 (require-package 'expand-region)
@@ -89,6 +117,10 @@
 ;; flycheck
 (require-package 'flycheck)
 (add-hook 'after-init-hook #'global-flycheck-mode)
+
+(require 'flycheck-tip)
+(flycheck-tip-use-timer 'verbose)
+
 ;; popup items
 (require 'popup)
 
@@ -277,7 +309,7 @@
 ;(setq default-frame-alist '((font . "Consolas for Powerline 12")))
 
 (set-frame-font "Source Code Pro for Powerline 12")
-(set-fontset-font "fontset-default" 'han '("Microsoft JhengHei" . "unicode-bmp"))
+(set-fontset-font "fontset-default" 'han '("方正清刻本悦宋简体" . "unicode-bmp"))
 
 
 ;; replace default buffer list with the excellent ibuffer
@@ -368,7 +400,7 @@ With a preifx ARG always prompt for command to use."
                          (read-string "Google: "))))))
 (global-set-key (kbd "C-c g") 'google)
 ;; auto indent
-(electric-indent-mode +1)
+;; (electric-indent-mode +1)
 
 (defun visit-term-buffer ()
   "Create or visit a terminal buffer."
@@ -615,7 +647,7 @@ This functions should be added to the hooks of major modes for porgramming."
 
 (require 'powerline)
 (powerline-default-theme)
-(setq powerline-default-separator 'slant)
+(setq powerline-default-separator 'wave)
 
 
 
