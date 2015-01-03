@@ -247,4 +247,7 @@ This functions should be added to the hooks of major modes for porgramming."
             (modify-syntax-entry ?_ "w")
             (modify-syntax-entry ?- "w")))
 
+;; draw underline lower
+(setq x-underline-at-descent-line t)
+
 (provide 'init-editing)
