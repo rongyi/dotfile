@@ -11,6 +11,7 @@
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
+(require 'init-site-lisp)
 (require 'init-elpa)
 (require 'init-utils)
 (require 'init-ui)
@@ -70,6 +71,7 @@
   (server-start))
 
 (require 'init-evil)
+
 
 (provide 'init)
 ;;; init ends here

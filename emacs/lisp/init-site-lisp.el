@@ -7,9 +7,9 @@
     (progn
       (setq load-path
             (append
-             (loop for dir in (directory-files parent-dir)
-                   unless (string-match "^\\." dir)
-                   collecting (expand-file-name dir))
+             (remove-if-not
+              (lambda (dir) (file-directory-p dir))
+              (directory-files (expand-file-name parent-dir) t "^[^\\.]"))
              load-path)))))
 
 (sanityinc/add-subdirs-to-load-path
@@ -27,8 +27,8 @@
   (let ((dir (site-lisp-dir-for name)))
     (message "Downloading %s from %s" name url)
     (unless (file-directory-p dir)
-      (make-directory dir)
-      (add-to-list 'load-path dir))
+      (make-directory dir t))
+    (add-to-list 'load-path dir)
     (let ((el-file (site-lisp-library-el-path name)))
       (url-copy-file url el-file t nil)
       el-file)))
@@ -50,7 +50,7 @@ source file under ~/.emacs.d/site-lisp/name/"
 (unless (> emacs-major-version 23)
   (ensure-lib-from-url
    'package
-   "http://repo.or.cz/w/emacs.git/blob_plain/1a0a666f941c99882093d7bd08ced15033bc3f0c:/lisp/emacs-lisp/package.el"))
+   "http://repo.or.cz/w/emacs.git/blob_plain/ba08b24186711eaeb3748f3d1f23e2c2d9ed0d09:/lisp/emacs-lisp/package.el"))
 
 
 (provide 'init-site-lisp)

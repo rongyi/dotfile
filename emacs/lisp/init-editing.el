@@ -126,6 +126,19 @@ The body of the advice is in BODY."
         (message "Indented buffer.")))))
 (global-set-key (kbd "C-M-\\") 'indent-region-or-buffer)
 
+(defun comment-or-uncomment-region-or-current-line ()
+  (interactive)
+  (save-excursion
+    (if (region-active-p)
+        (progn
+          (comment-or-uncomment-region (region-beginning) (region-end))
+          (message "(un)comment region"))
+      (progn
+        (comment-or-uncomment-region (line-beginning-position) (line-end-position))
+        (message "(un)comment currentline")))))
+
+(global-set-key (kbd "C-\\") 'comment-or-uncomment-region-or-current-line)
+
 (defun byte-compile-init-dir ()
   "Byte-compile all el file in dot dir."
   (interactive)
@@ -218,6 +231,20 @@ This functions should be added to the hooks of major modes for porgramming."
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
 
+;; remember cursor place
+(setq save-place-file "~/.emacs.d/saveplace")
+(setq-default save-place t)
+(require 'saveplace)
 
+;; colorful variable
+(require-package 'color-identifiers-mode)
+(require 'color-identifiers-mode)
+(global-color-identifiers-mode)
+
+;; make dash and underscore part of a word
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (modify-syntax-entry ?_ "w")
+            (modify-syntax-entry ?- "w")))
 
 (provide 'init-editing)

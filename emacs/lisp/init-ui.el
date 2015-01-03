@@ -82,7 +82,6 @@
 ;; change size
 (when window-system (set-frame-size (selected-frame) 120 40))
 (set-frame-font "Source Code Pro for Powerline 12")
-(setq default-frame-alist '((font . "Source Code Pro for Powerline 12")))
 (set-fontset-font "fontset-default" 'han '("方正清刻本悦宋简体" . "unicode-bmp"))
 
 (require-package 'powerline)
@@ -90,5 +89,9 @@
 (powerline-default-theme)
 (setq powerline-default-separator 'wave)
 
+;; daemon mode settings
+(add-to-list 'default-frame-alist '(font . "Source Code Pro for Powerline 12"))
+(add-to-list 'default-frame-alist '(width . 109))
+(add-to-list 'default-frame-alist '(height . 35))
 
 (provide 'init-ui)

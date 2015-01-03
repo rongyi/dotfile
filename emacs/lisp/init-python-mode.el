@@ -11,4 +11,6 @@
 (setq jedi:setup-keys t)                      ; optional
 (setq jedi:complete-on-dot t)                 ; optional
 
+(add-hook 'python-mode-hook 'anaconda-mode)
+
 (provide 'init-python-mode)

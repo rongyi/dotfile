@@ -95,6 +95,14 @@
   (after-load 'skewer-mode
     (add-hook 'skewer-mode-hook
               (lambda () (inferior-js-keys-mode -1)))))
+;; Tern setting
+(add-to-list 'load-path "/usr/local/lib/node_modules/tern/emacs/")
+(autoload 'tern-mode "tern.el" nil t)
+(add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+(eval-after-load 'tern
+  '(progn
+     (require 'tern-auto-complete)
+     (tern-ac-setup)))
 
 
 (provide 'init-javascript)
