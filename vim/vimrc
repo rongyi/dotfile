@@ -15,7 +15,7 @@ filetype plugin indent on
 if !has('gui_running')
   if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal"
     set t_Co=256
-    colorscheme Tomorrow-Night-Eighties
+    colorscheme Tomorrow
   elseif has("terminfo")
     colorscheme default
     set t_Co=8
@@ -68,8 +68,8 @@ set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz
 " Use emacs-style tab completion when selecting files, etc
 set wildmode=longest,list
 set wrap " Enable wrapping
-set linebreak " Break long lines by word, not char
-set showbreak=↪\  " Character to precede line wraps
+"set linebreak " Break long lines by word, not char
+"set showbreak=↪\  " Character to precede line wraps
 silent! set mouse=nvc       " Use the mouse, but not in insert mode
 " none of these should be word dividers, so make them not be
 set iskeyword+=_,$,@,%,#
@@ -232,7 +232,7 @@ let g:syntastic_style_warning_symbol = '≈'
 let g:syntastic_always_populate_loc_list = 1
 " specify python checker, you need install it via `pip install flake8` first.
 let g:syntastic_python_checkers = ['flake8']
-let g:syntastic_python_flake8_args = '--select=F,C9 --max-complexity=10'
+" let g:syntastic_python_flake8_args = '--select=F,C9 --max-complexity=10'
 
 " ag(silver_searcher) vim bundle
 " bind a shorcut for using silver_search to search the word under cursor
@@ -273,3 +273,8 @@ nnoremap <leader>pc :YcmCompleter GoToDeclaration<CR>
 let g:indentLine_char = '┆'
 " needed only in python code, disable it by default
 let g:indentLine_enabled = 0
+
+"enhanced incsearch
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
