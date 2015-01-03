@@ -1,8 +1,14 @@
-(defmacro after-load (feature &rest body)
-  "After FEATURE is loaded, evaluate BODY."
-  (declare (indent defun))
-  `(eval-after-load ,feature
-     '(progn ,@body)))
+(require-package 'thingatpt)
+(require-package 'dash)
+(require-package 'ov)
+
+(if (fboundp 'with-eval-after-load)
+    (defalias 'after-load 'with-eval-after-load)
+  (defmacro after-load (feature &rest body)
+    "After FEATURE is loaded, evaluate BODY."
+    (declare (indent defun))
+    `(eval-after-load ,feature
+       '(progn ,@body))))
 
 
 ;;----------------------------------------------------------------------------
@@ -83,5 +89,82 @@
         (error "Cannot open tramp file")
       (browse-url (concat "file://" file-name)))))
 
+(defun insert-date ()
+  "Insert a timestamp according to locale's date and time format."
+  (interactive)
+  (insert (format-time-string "%c" (current-time))))
 
+(global-set-key (kbd "C-x d") 'insert-date)
+
+(defun todo-ov-evaporate (_ov _after _beg _end &optional _length)
+  (let ((inhibit-modification-hooks t))
+    (if _after (ov-reset _ov))))
+
+(defun annotate-todo ()
+  "Put fringe marker on TODO: lines in the curent buffer."
+  (interactive)
+  (ov-set (format "[[:space:]]*%s+[[:space:]]*TODO:" comment-start)
+          'before-string
+          (propertize (format "A")
+                      'display '(left-fringe right-triangle))
+          'modification-hooks '(todo-ov-evaporate)))
+
+
+(defun swap-windows ()
+  "If you have 2 windows, it swaps them."
+  (interactive)
+  (if (/= (count-windows) 2)
+      (message "You need exactly 2 windows to do this.")
+    (let* ((w1 (car (window-list)))
+           (w2 (cadr (window-list)))
+           (b1 (window-buffer w1))
+           (b2 (window-buffer w2))
+           (s1 (window-start w1))
+           (s2 (window-start w2)))
+      (set-window-buffer w1 b2)
+      (set-window-buffer w2 b1)
+      (set-window-start w1 s2)
+      (set-window-start w2 s1)))
+  (other-window 1))
+
+(global-set-key (kbd "C-x s") 'swap-windows)
+
+(defun switch-to-previous-buffer ()
+  "Switch to previously open buffer.
+Repeated invocations toggle between the two most recently open buffers."
+  (interactive)
+  (switch-to-buffer (other-buffer (current-buffer) 1)))
+
+(global-set-key (kbd "C-x O") 'switch-to-previous-buffer)
+
+(defun kill-other-buffers ()
+  "Kill all buffers but the current one.
+Doesn't mess with special buffers."
+  (interactive)
+  (-each
+   (->> (buffer-list)
+     (-filter #'buffer-file-name)
+     (--remove (eql (current-buffer) it)))
+   #'kill-buffer))
+
+;;; Emacs in OSX already has fullscreen support
+;;; Emacs has a similar built-in command in 24.4
+(defun fullscreen ()
+  "Make Emacs window fullscreen.
+
+This follows freedesktop standards, should work in X servers."
+  (interactive)
+  (if (eq window-system 'x)
+      (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
+                             '(2 "_NET_WM_STATE_FULLSCREEN" 0))
+    (error "Only X server is supported")))
+
+(defun find-user-init-file (&optional arg)
+  "Edit the `user-init-file', in another window."
+  (interactive)
+  (find-file-other-window user-init-file))
+
+
+
+  
 (provide 'init-utils)
