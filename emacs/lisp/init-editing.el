@@ -192,7 +192,7 @@ This functions should be added to the hooks of major modes for porgramming."
  scroll-preserve-screen-position 'always
  set-mark-command-repeat-pop t
  show-trailing-whitespace t
- tooltip-delay 0.1
+ tooltip-delay 0.01
  truncate-lines nil
  truncate-partial-width-windows nil
  visible-bell t)
@@ -249,5 +249,10 @@ This functions should be added to the hooks of major modes for porgramming."
 
 ;; draw underline lower
 (setq x-underline-at-descent-line t)
+
+;;; add yasnippet
+(require-package 'yasnippet)
+(require 'yasnippet)
+(yas-global-mode 1)
 
 (provide 'init-editing)
