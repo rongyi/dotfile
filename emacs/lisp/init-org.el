@@ -16,7 +16,8 @@
       org-fast-tag-selection-single-key 'expert
       org-html-validation-link nil
       org-export-kill-product-buffer-when-displayed t
-      org-tags-column 80)
+      org-tags-column 80
+      org-startup-folded nil)
 
 
 ; Refile targets include this file and any file contributing to the agenda - up to 5 levels deep

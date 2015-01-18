@@ -12,6 +12,7 @@
 (add-to-list 'completion-styles 'initials t)
 ;; Stop completion-at-point from popping up completion buffers so eagerly
 (setq completion-cycle-threshold 5)
+(setq ac-use-fuzzy t)
 
 ;; TODO: find solution for php, haskell and other modes where TAB always does something
 
