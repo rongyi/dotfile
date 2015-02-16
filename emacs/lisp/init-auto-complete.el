@@ -1,66 +1,43 @@
-(require-package 'auto-complete)
-(require 'auto-complete-config)
-(global-auto-complete-mode t)
-(setq-default ac-expand-on-auto-complete nil)
-(setq-default ac-auto-start t)
-(setq-default ac-dwim nil) ; To get pop-ups with docs even if a word is uniquely completed
+(require-package 'company)
+(require 'company)
+(add-hook 'after-init-hook 'global-company-mode)
 
-;;----------------------------------------------------------------------------
-;; Use Emacs' built-in TAB completion hooks to trigger AC (Emacs >= 23.2)
-;;----------------------------------------------------------------------------
-(setq tab-always-indent 'complete)  ;; use 't when auto-complete is disabled
-(add-to-list 'completion-styles 'initials t)
-;; Stop completion-at-point from popping up completion buffers so eagerly
-(setq completion-cycle-threshold 5)
-(setq ac-use-fuzzy t)
-
-;; TODO: find solution for php, haskell and other modes where TAB always does something
-
-(setq c-tab-always-indent nil
-      c-insert-tab-function 'indent-for-tab-command)
-
-;; hook AC into completion-at-point
-(defun sanityinc/auto-complete-at-point ()
-  (when (and (not (minibufferp))
-	     (fboundp 'auto-complete-mode)
-	     auto-complete-mode)
-    (auto-complete)))
-
-(defun sanityinc/never-indent ()
-  (set (make-local-variable 'indent-line-function) (lambda () 'noindent)))
-
-(defun set-auto-complete-as-completion-at-point-function ()
-  (setq completion-at-point-functions
-        (cons 'sanityinc/auto-complete-at-point
-              (remove 'sanityinc/auto-complete-at-point completion-at-point-functions))))
-
-(add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
+(require-package 'company-anaconda)
+(require 'company-anaconda)
+(add-to-list 'company-backends 'company-anaconda)
+(add-hook 'python-mode-hook 'anaconda-mode)
 
 
-(set-default 'ac-sources
-             '(ac-source-imenu
-               ac-source-dictionary
-               ac-source-words-in-buffer
-               ac-source-words-in-same-mode-buffers
-               ac-source-words-in-all-buffer))
+(after-load 'company
+  (setq
+   ;; never start auto-completion unless I ask for it
+   company-idle-delay 0.1
+   ;; autocomplete right after '.'
+   company-minimum-prefix-length 0
+   ;; remove echo delay
+   company-echo-delay 0
+   ;; don't complete in certain modes
+   company-global-modes '(not git-commit-mode)))
 
-(dolist (mode '(magit-log-edit-mode
-                log-edit-mode org-mode text-mode haml-mode
-                git-commit-mode
-                sass-mode yaml-mode csv-mode espresso-mode haskell-mode
-                html-mode nxml-mode sh-mode smarty-mode clojure-mode
-                lisp-mode textile-mode markdown-mode tuareg-mode
-                js3-mode css-mode less-css-mode sql-mode
-                sql-interactive-mode
-                inferior-emacs-lisp-mode))
-  (add-to-list 'ac-modes mode))
+(require-package 'slime-company)
+(require 'slime-company)
+(slime-setup '(slime-company))
 
+(define-key company-active-map (kbd "\C-n") 'company-select-next)
+(define-key company-active-map (kbd "\C-p") 'company-select-previous)
+(define-key company-active-map (kbd "\C-q") 'company-show-doc-buffer)
+(define-key company-active-map (kbd "<tab>") 'company-complete)
 
-;; Exclude very large buffers from dabbrev
-(defun sanityinc/dabbrev-friend-buffer (other-buffer)
-  (< (buffer-size other-buffer) (* 1 1024 1024)))
+;; tern-mode
+(require-package 'company-tern)
+(require 'company-tern)
+(add-to-list 'company-backends 'company-tern)
 
-(setq dabbrev-friend-buffer-function 'sanityinc/dabbrev-friend-buffer)
+(require-package 'company-auctex)
+(require 'company-auctex)
+(company-auctex-init)
 
+(require-package 'company-math)
+(add-to-list 'company-backends 'company-math-symbols-unicode)
 
 (provide 'init-auto-complete)

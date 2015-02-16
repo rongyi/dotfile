@@ -5,11 +5,6 @@
 
 (require-package 'pip-requirements)
 
-;; jedi
-(require-package 'jedi)
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:setup-keys t)                      ; optional
-(setq jedi:complete-on-dot t)                 ; optional
 
 (add-hook 'python-mode-hook 'anaconda-mode)
 
