@@ -41,3 +41,5 @@ https://github.com/rongyi/vim-snippets.git
 https://github.com/tpope/vim-surround.git
 https://github.com/Valloric/xmledit.git
 https://github.com/Valloric/YouCompleteMe.git
+https://github.com/chriskempson/base16-vim.git
+https://github.com/jeaye/color_coded.git
