@@ -40,6 +40,10 @@ This function is called at the very end of Spacemacs initialization."
   (setq org-startup-folded nil)
   (set-frame-font "Source Code Pro for Powerline 10")
   (add-to-list 'default-frame-alist '(font . "Source Code Pro for Powerline 10"))
+  (add-hook 'after-make-frame-functions
+            (lambda (new-frame)
+              (set-fontset-font "fontset-default" 'han '("方正清刻本悦宋简体" . "unicode-bmp"))
+              ))
   (set-fontset-font "fontset-default" 'han '("方正清刻本悦宋简体" . "unicode-bmp"))
   (org-babel-do-load-languages 'org-babel-load-languages '((ditaa . t)))
   (eval-after-load 'evil
