@@ -1,14 +1,15 @@
 (setq-default dotspacemacs-configuration-layers
               '((colors :variables colors-enable-rainbow-identifiers t
                         :variables colors-enable-nyan-cat-progress-bar ,(display-graphic-p))
-                company-mode
+                (auto-completion :variables auto-completion-use-tab-instead-of-enter t)
+                syntax-checking
                 git
                 html
                 javascript
                 markdown
                 python
                 c-c++
-                slime
+                common-lisp
                 evil-snipe)
 
               dotspacemacs-startup-banner 'random
@@ -20,6 +21,8 @@
  startup."
   (setq company-mode-use-tab-instead-of-enter t)
   (setq-default git-magit-status-fullscreen t)
+  (setq-default dotspacemacs-themes '(spacemacs-dark leuven zenburn))
+  (setq-default evil-escape-key-sequence "jk")
   )
 
 
@@ -32,8 +35,11 @@ This function is called at the very end of Spacemacs initialization."
   (setq inferior-lisp-program "/usr/bin/clisp")
   (setq js2-basic-offset 2)
   (setq js2-indent-level 2)
+  (setq dotspacemacs-active-transparency 75)
+  (setq dotspacemacs-inactive-transparency 75)
   (setq org-startup-folded nil)
   (set-frame-font "Source Code Pro for Powerline 10")
+  (add-to-list 'default-frame-alist '(font . "Source Code Pro for Powerline 10"))
   (set-fontset-font "fontset-default" 'han '("方正清刻本悦宋简体" . "unicode-bmp"))
   (org-babel-do-load-languages 'org-babel-load-languages '((ditaa . t)))
   (eval-after-load 'evil
@@ -65,4 +71,8 @@ This function is called at the very end of Spacemacs initialization."
        (define-key evil-normal-state-map "\C-w" 'evil-delete)
        (define-key evil-insert-state-map "\C-w" 'evil-delete)
        (define-key evil-visual-state-map "\C-w" 'evil-delete)))
+
+  (setq inferior-lisp-program "/usr/bin/clisp")
+  (add-hook 'prog-mode-hook
+            (lambda () (modify-syntax-entry ?_ "w")))
 )
