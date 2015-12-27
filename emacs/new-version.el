@@ -13,31 +13,96 @@
 (require 'saveplace)
 ;; smooth scrolling
 (setq scroll-margin 5
-scroll-conservatively 9999
-scroll-step 1)
+			scroll-conservatively 9999
+			scroll-step 1
+			scroll-preserve-screen-position 1
+			redisplay-dont-pause t)
+;; mouse scroll
+(setq mouse-wheel-follow-mouse 't)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+
 ;; full screen if needed
 ;;(toggle-frame-fullscreen) 
 
 (scroll-bar-mode 0)
-(menu-bar-mode 0)
-(tool-bar-mode 0)
+(when (fboundp 'menu-bar-mode)
+  (menu-bar-mode -1))
+(when (fboundp 'tool-bar-mode)
+  (tool-bar-mode -1))
 ;; yes-or-no-p ==> y-or-n
-(fset 'yes-or-no-p 'y-or-no-p)
+(defalias 'yes-or-no-p 'y-or-no-p)
 ;; auto indent
 (define-key global-map (kbd "RET") 'newline-and-indent)
+(setq ad-redefinition-action 'accept)
+;; no tab using 2spaces for tab
+(setq-default
+ indent-tabs-mode nil
+ tab-width 2)
 
+;; break long lines at word boundaries
+(visual-line-mode 1)
 
+;; Enable the mouse in terminal mode.
+(xterm-mouse-mode 1)
+
+;; syntax highlighting
+(global-font-lock-mode t)
+(setq font-lock-maximum-decoration t)
+;; line mode
+(line-number-mode 1)
+(column-number-mode 1)
+;; show the modifier combination I just typed almost immediately
+(setq echo-keystrokes 0.1)
+
+;; UTF-8 everything!
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+
+;; Flash the frame to represent a bell.
+(setq visible-bell t)
+;; nevermind that's annoying
+(setq ring-bell-function 'ignore)
+;; Show me the new saved file if the contents change on disk when editing.
+(global-auto-revert-mode 1)
+
+;; This isn't a typewriter (even if it is a terminal); one space after sentences,
+;; please.
+(setq sentence-end-double-space nil)
 ;; font
-(set-frame-font "Source Code Pro for Powerline 10")
-(add-to-list 'default-frame-alist '(font . "Source Code Pro for Powerline 10"))
+(set-frame-font "Source Code Pro for Powerline 12")
+(add-to-list 'default-frame-alist '(font . "Source Code Pro for Powerline 12"))
 (add-hook 'after-make-frame-functions
 	  (lambda (new-frame)
 	    (set-fontset-font "fontset-default" 'han '("方正清刻本悦宋简体" . "unicode-bmp"))
 	    ))
 (set-fontset-font "fontset-default" 'han '("方正清刻本悦宋简体" . "unicode-bmp"))
 
+;; hippie expand
 (global-set-key (kbd "M-/") 'hippie-expand)
+
+(setq hippie-expand-try-functions-list
+			'(try-expand-dabbrev
+				try-expand-dabbrev-all-buffers
+				try-expand-dabbrev-from-kill
+				try-complete-file-name-partially
+				try-complete-file-name
+				try-expand-all-abbrevs
+				try-expand-list
+				try-expand-line
+				try-complete-lisp-symbol-partially
+				try-complete-lisp-symbol))
+
 (load-theme 'leuven)
+
+(when (eq system-type 'darwin) ;; mac specific settings
+  (setq mac-option-modifier 'alt)
+  (setq mac-command-modifier 'meta)
+  )
+
+(setq whitespace-style '(tailing))
+(global-whitespace-mode 1)
 
 
 
@@ -57,6 +122,11 @@ scroll-step 1)
     (error
      (package-refresh-contents)
      (package-install pkg))))
+(defmacro after-load (feature &rest body)
+	"After FEATURE is loaded, evaluate BODY."
+	(declare (indent defun))
+	`(eval-after-load ,feature
+		 '(progn ,@body)))
 
 ;; evil setting
 (require-install-nessary 'evil)
@@ -121,18 +191,37 @@ scroll-step 1)
 (setq helm-quick-update t)
 (setq helm-bookmark-show-location t)
 (setq helm-buffers-fuzzy-matching t)
-(global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
+;;(global-set-key (kbd "M-x") 'helm-M-x)
+(setq helm-buffers-fuzzy-matching t)
+(setq helm-split-window-default-side (quote other))
+(setq helm-split-window-in-side-p nil)
+(defun my-helm-in-ido (buffer)
+  "Display a helm buffer in ido. Send the purists screaming."
+  (interactive)
+  (ido-buffer-internal 'display 'display-buffer nil nil nil 'ignore))
+(setq helm-display-function 'helm-default-display-buffer)
+(setq helm-adaptive-history-file (expand-file-name
+				  "helm-adapative-history"
+				  user-emacs-directory))
+
+(define-key helm-map (kbd "C-p") 'helm-execute-persistent-action)
+(define-key helm-map (kbd "C-n") 'helm-delete-minibuffer-contents)
+(define-key helm-map (kbd "C-j") 'helm-next-line)
+(define-key helm-map (kbd "C-k") 'helm-previous-line)
 
 ;; magit
 (require-install-nessary 'magit)
 (evil-leader/set-key "g" 'magit-status)
+(setq magit-commit-arguments '("--verbose"))
 
 
 ;; powerline
-(require-install-nessary 'powerline)
-(setq powerline-default-separator 'wave)
-(powerline-center-evil-theme)
+;; (require-install-nessary 'powerline)
+;; (setq powerline-default-separator 'wave)
+;; (powerline-center-evil-theme)
+
+;; display time
+(setq display-time-24hr-format t)
 (display-time-mode t)
 
 ;; flycheck
@@ -169,7 +258,7 @@ scroll-step 1)
 
 ;; smartpare
 
-(require-install-nessary 'smartparens-config)
+(require-install-nessary 'smartparens)
 (add-hook 'prog-mode-hook #'smartparens-mode)
 
 ;; company
@@ -201,4 +290,73 @@ scroll-step 1)
 (setq company-tern-property-marker "")
 (setq company-tern-meta-as-single-line t)
 
+;; smart-mode-line
+(require-install-nessary 'smart-mode-line)
+(setq sml/no-confirm-load-theme t)
+(sml/setup)
+(setq sml/theme 'light)
+(setq sml/shorten-directory t)
+(setq sml/shorten-modes t)
 
+
+;; ido mode
+(after-load 'ido
+	(ido-mode t)
+	(ido-everywhere t))
+(global-set-key (kbd "C-x C-f") 'ido-find-file)
+(require-install-nessary 'ido-ubiquitous)
+(ido-ubiquitous-mode 1)
+(require-install-nessary 'ido-vertical-mode)
+(ido-vertical-mode)
+(require-install-nessary 'flx-ido)
+(setq gc-cons-threshold 20000000)
+(flx-ido-mode 1)
+
+
+;; in python, make word_count wordCount a word
+(add-hook 'python-mode-hook (lambda ()
+															(subword-mode 1)))
+
+;; eldoc-mode
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+
+;; org-mode setting
+(setq org-startup-folded nil
+			org-src-fontify-natively t
+			org-src-tab-acts-natively t)
+
+;; set shell coding
+(defadvice ansi-term (after ry/advise-ansi-term-coding-system activate)
+	(set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
+
+;; close buffer when quit shell
+(defadvice term-sentinel (around ry/advice-term-sentinel (proc msg) activate)
+	(if (memq (process-status proc) '(signal exit))
+			(let ((buffer (process-buffer proc)))
+				ad-do-it
+				(kill-buffer buffer))
+		ad-do-it))
+
+;; ediff option
+
+(setq ediff-split-window-function 'split-window-horizontally)
+(setq ediff-diff-options "-w")
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+
+;; export shell path
+(require-install-nessary 'exec-path-from-shell)
+(when (and (eq system-type 'darwin) (display-graphic-p))
+	(require-install-nessary 'exec-path-from-shell)
+	(setq exec-path-from-shell-variables '("PATH"  "MANPATH" "SHELL"))
+	(exec-path-from-shell-initialize))
+
+
+;; smex
+(require-install-nessary 'smex)
+(smex-initialize)
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+(setq-default smex-key-advice-ignore-menu-bar t)
+;; change cache save place
+(setq smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
