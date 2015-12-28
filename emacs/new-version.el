@@ -130,7 +130,6 @@
 
 ;; evil setting
 (require-install-nessary 'evil)
-(evil-mode 1)
 
 (eval-after-load 'evil
   '(progn
@@ -163,18 +162,27 @@
      (define-key evil-normal-state-map "\C-w" 'evil-delete)
      (define-key evil-insert-state-map "\C-w" 'evil-delete)
      (define-key evil-visual-state-map "\C-w" 'evil-delete)
+     ;; make j == gj, visual line
+     (setq evil-cross-lines t)
+     (setq evil-want-visual-char-semi-exclusive t)
+     (setq evil-move-cursor-back nil)
      (setq evil-emacs-state-cursor '("red" box))
      (setq evil-normal-state-cursor '("DarkGoldenrod2" box))
      (setq evil-visual-state-cursor '("gray" box))
      (setq evil-insert-state-cursor '("chartreuse3" bar))
      (setq evil-replace-state-cursor '("red" bar))
      (setq evil-operator-state-cursor '("red" hollow))))
+(evil-mode 1)
 
 ;; evil leader
 (require-install-nessary 'evil-leader)
 (setq evil-leader/in-all-states 1)
 (global-evil-leader-mode)
 (evil-leader/set-leader ",")
+(evil-leader/set-key
+  "l" 'linum-mode
+  "w" 'save-buffer)
+
 ;; avy
 (require-install-nessary 'avy)
 (evil-leader/set-key "f" 'avy-goto-word-or-subword-1)
@@ -213,6 +221,8 @@
 (require-install-nessary 'magit)
 (evil-leader/set-key "g" 'magit-status)
 (setq magit-commit-arguments '("--verbose"))
+;; to be tested
+;;(require-install-nessary 'magit-find-file)
 
 
 ;; powerline
@@ -267,7 +277,7 @@
 (add-hook 'after-init-hook 'global-company-mode)
 (add-hook 'after-init-hook 'company-statistics-mode)
 (with-eval-after-load 'company
-  '(setq company-idle-delay 0.2
+  '(setq company-idle-delay 0
 	company-minimum-prefix-length 2
 	company-require-match nil
 	company-dabbrev-ignore-case nil
@@ -360,3 +370,18 @@
 (setq-default smex-key-advice-ignore-menu-bar t)
 ;; change cache save place
 (setq smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
+
+;; close unnessary buffer automaticly
+(require-install-nessary 'popwin)
+
+(after-load 'popwin
+  (add-to-list 'popwin:special-display-config `"*ag search*")
+  (add-to-list 'popwin:special-display-config `("*magit-process*" :noselect t))
+  (add-to-list 'popwin:special-display-config `"*Flycheck errors*")
+  (add-to-list 'popwin:special-display-config `"*Occur*")
+  (add-to-list 'popwin:special-display-config `("*Compile-Log*" :noselect t))
+  (add-to-list 'popwin:special-display-config `("*Paradox Report*" :noselect t))
+  (add-to-list 'popwin:special-display-config `("\\*godoc" :regexp t)))
+(popwin-mode 1)
+
+
