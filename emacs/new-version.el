@@ -159,6 +159,9 @@
 
 
 
+(defun insert-pointer-access ()
+  (interactive)
+  (insert "->"))
 
 
 ;; evil setting
@@ -167,6 +170,7 @@
 
 (eval-after-load 'evil
   '(progn
+     (define-key evil-insert-state-map (kbd "M-.") 'insert-pointer-access)
      (define-key evil-insert-state-map "\C-c" 'evil-normal-state)
      (define-key evil-visual-state-map "\C-c" 'evil-normal-state)
      (define-key evil-normal-state-map "\C-e" 'evil-end-of-line)
@@ -454,8 +458,9 @@
   "SPC" 'ethan-wspace-clean-all)
 
 ;; Enhance C-x o when more than two window are open
+(require-install-nessary 'switch-window)
 (require-install-nessary 'ace-window)
-(global-set-key (kbd "C-x o") 'ace-window)
+(global-set-key (kbd "C-x o") 'switch-window)
 (global-set-key (kbd "C-x C-o") 'ace-swap-window)
 (evil-leader/set-key "K" (lambda ()
                            (interactive)
@@ -467,3 +472,63 @@
 ;; snippet
 (require-install-nessary 'yasnippet)
 (yas-global-mode 1)
+
+
+(defun comment-or-uncomment-line-or-region ()
+  "comments or uncomments the current line or region"
+  (interactive)
+  (if (region-active-p)
+      (comment-or-uncomment-region (region-beginning) (region-end))
+    (comment-or-uncomment-region (line-beginning-position) (line-end-position))))
+
+(evil-leader/set-key "c SPC" 'comment-or-uncomment-line-or-region)
+;; ycmd for emacs
+(require-install-nessary 'ycmd)
+(add-hook 'c++-mode-hook 'ycmd-mode)
+(set-variable 'ycmd-server-command '("python" "/home/ry/.vim/bundle/YouCompleteMe/third_party/ycmd/ycmd"))
+(set-variable 'ycmd-global-config "/home/ry/.emacs.d/ycm_extra_conf.py")
+(set-variable 'ycmd-extra-conf-whitelist '("/home/ry/tunnel-agent/agentplug"))
+
+(require-install-nessary 'company-ycmd)
+(company-ycmd-setup)
+(require-install-nessary 'flycheck-ycmd)
+(flycheck-ycmd-setup)
+
+;; make header file c++mode
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+
+;; Custom fringe indicator
+(when (fboundp 'define-fringe-bitmap)
+  (define-fringe-bitmap 'my-flycheck-fringe-indicator
+    (vector #b00000000
+            #b00000000
+            #b00000000
+            #b00000000
+            #b00000000
+            #b00000000
+            #b00000000
+            #b00011100
+            #b00111110
+            #b00111110
+            #b00111110
+            #b00011100
+            #b00000000
+            #b00000000
+            #b00000000
+            #b00000000
+            #b01111111)))
+
+(flycheck-define-error-level 'error
+  :overlay-category 'flycheck-error-overlay
+  :fringe-bitmap 'my-flycheck-fringe-indicator
+  :fringe-face 'flycheck-fringe-error)
+
+(flycheck-define-error-level 'warning
+  :overlay-category 'flycheck-warning-overlay
+  :fringe-bitmap 'my-flycheck-fringe-indicator
+  :fringe-face 'flycheck-fringe-warning)
+
+(flycheck-define-error-level 'info
+  :overlay-category 'flycheck-info-overlay
+  :fringe-bitmap 'my-flycheck-fringe-indicator
+  :fringe-face 'flycheck-fringe-info)
