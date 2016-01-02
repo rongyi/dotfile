@@ -1,3 +1,27 @@
+;; install evil mode
+
+(defun require-install-nessary (pkg)
+  (condition-case nil
+      (require pkg)
+    (error
+     (package-refresh-contents)
+     (package-install pkg))))
+
+;; a eval-after-load sugar
+(defmacro after-load (feature &rest body)
+  "After FEATURE is loaded, evaluate BODY."
+  (declare (indent defun))
+  `(eval-after-load ,feature
+     '(progn ,@body)))
+
+;; install package
+(setq package-archives '(("melpa" . "http://melpa.milkbox.net/packages/")
+                         ("org" . "http://orgmode.org/elpa/")
+                         ("gnu" . "http://elpa.gnu.org/packages/")))
+
+(require 'package)
+(package-initialize)
+
 ;; basic
 (setq inhibit-startup-message t)
 (setq initial-scratch-message "happy hacking, ry")
@@ -13,16 +37,17 @@
 (require 'saveplace)
 ;; smooth scrolling
 (setq scroll-margin 5
-			scroll-conservatively 9999
-			scroll-step 1
-			scroll-preserve-screen-position 1
-			redisplay-dont-pause t)
+      scroll-conservatively 9999
+      scroll-step 1
+      scroll-preserve-screen-position 1
+      redisplay-dont-pause t)
 ;; mouse scroll
 (setq mouse-wheel-follow-mouse 't)
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
 
 ;; full screen if needed
-;;(toggle-frame-fullscreen) 
+;;(toggle-frame-fullscreen)
+;;(toggle-frame-maximized)
 
 (scroll-bar-mode 0)
 (when (fboundp 'menu-bar-mode)
@@ -37,7 +62,8 @@
 ;; no tab using 2spaces for tab
 (setq-default
  indent-tabs-mode nil
- tab-width 2)
+ tab-width 2
+ c-basic-offset 2)
 
 ;; break long lines at word boundaries
 (visual-line-mode 1)
@@ -67,6 +93,33 @@
 ;; Show me the new saved file if the contents change on disk when editing.
 (global-auto-revert-mode 1)
 
+;; Automatically save buffers before launching M-x compile and friends,
+;; instead of asking you if you want to save.
+(setq compilation-ask-about-save nil)
+
+;; Make the selection work like most people expect.
+(delete-selection-mode t)
+(transient-mark-mode 1)
+
+;; show current function in modeline
+(which-function-mode)
+;; show column numbers in modline
+(setq column-number-mode t)
+
+;; use ibuffer for list buffer
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+
+(add-hook 'prog-mode-hook 'whitespace-mode)
+;; highlight the word under the point
+(add-hook 'prog-mode-hook 'idle-highlight-mode)
+(add-hook 'prog-mode-hook 'hl-line-mode)
+;; highlight current line number
+(require-install-nessary 'hlinum)
+(hlinum-activate)
+;; highlight matching braces
+(show-paren-mode 1)
+
+
 ;; This isn't a typewriter (even if it is a terminal); one space after sentences,
 ;; please.
 (setq sentence-end-double-space nil)
@@ -74,25 +127,25 @@
 (set-frame-font "Source Code Pro for Powerline 12")
 (add-to-list 'default-frame-alist '(font . "Source Code Pro for Powerline 12"))
 (add-hook 'after-make-frame-functions
-	  (lambda (new-frame)
-	    (set-fontset-font "fontset-default" 'han '("方正清刻本悦宋简体" . "unicode-bmp"))
-	    ))
+          (lambda (new-frame)
+            (set-fontset-font "fontset-default" 'han '("方正清刻本悦宋简体" . "unicode-bmp"))
+            ))
 (set-fontset-font "fontset-default" 'han '("方正清刻本悦宋简体" . "unicode-bmp"))
 
 ;; hippie expand
 (global-set-key (kbd "M-/") 'hippie-expand)
 
 (setq hippie-expand-try-functions-list
-			'(try-expand-dabbrev
-				try-expand-dabbrev-all-buffers
-				try-expand-dabbrev-from-kill
-				try-complete-file-name-partially
-				try-complete-file-name
-				try-expand-all-abbrevs
-				try-expand-list
-				try-expand-line
-				try-complete-lisp-symbol-partially
-				try-complete-lisp-symbol))
+      '(try-expand-dabbrev
+        try-expand-dabbrev-all-buffers
+        try-expand-dabbrev-from-kill
+        try-complete-file-name-partially
+        try-complete-file-name
+        try-expand-all-abbrevs
+        try-expand-list
+        try-expand-line
+        try-complete-lisp-symbol-partially
+        try-complete-lisp-symbol))
 
 (load-theme 'leuven)
 
@@ -106,30 +159,11 @@
 
 
 
-;; install package
-(setq package-archives '(("melpa" . "http://melpa.milkbox.net/packages/")
-                         ("org" . "http://orgmode.org/elpa/")
-                         ("gnu" . "http://elpa.gnu.org/packages/")))
 
-(require 'package)
-(package-initialize)
-
-;; install evil mode
-
-(defun require-install-nessary (pkg)
-  (condition-case nil
-      (require pkg)
-    (error
-     (package-refresh-contents)
-     (package-install pkg))))
-(defmacro after-load (feature &rest body)
-	"After FEATURE is loaded, evaluate BODY."
-	(declare (indent defun))
-	`(eval-after-load ,feature
-		 '(progn ,@body)))
 
 ;; evil setting
 (require-install-nessary 'evil)
+(require-install-nessary 'evil-anzu)
 
 (eval-after-load 'evil
   '(progn
@@ -162,6 +196,7 @@
      (define-key evil-normal-state-map "\C-w" 'evil-delete)
      (define-key evil-insert-state-map "\C-w" 'evil-delete)
      (define-key evil-visual-state-map "\C-w" 'evil-delete)
+     (require 'evil-anzu)
      ;; make j == gj, visual line
      (setq evil-cross-lines t)
      (setq evil-want-visual-char-semi-exclusive t)
@@ -209,8 +244,8 @@
   (ido-buffer-internal 'display 'display-buffer nil nil nil 'ignore))
 (setq helm-display-function 'helm-default-display-buffer)
 (setq helm-adaptive-history-file (expand-file-name
-				  "helm-adapative-history"
-				  user-emacs-directory))
+          "helm-adapative-history"
+          user-emacs-directory))
 
 (define-key helm-map (kbd "C-p") 'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-n") 'helm-delete-minibuffer-contents)
@@ -276,20 +311,25 @@
 (require-install-nessary 'company-statistics)
 (add-hook 'after-init-hook 'global-company-mode)
 (add-hook 'after-init-hook 'company-statistics-mode)
-(with-eval-after-load 'company
-  '(setq company-idle-delay 0
-	company-minimum-prefix-length 2
-	company-require-match nil
-	company-dabbrev-ignore-case nil
-	company-dabbrev-downcase nil
-	(defvar-local company-fci-mode-on-p nil)))
- 
+(setq company-idle-delay 0
+      company-minimum-prefix-length 2
+      company-require-match nil
+      company-dabbrev-ignore-case nil
+      company-dabbrev-downcase nil
+      company-require-match nil
+      company-show-numbers t
+      company-transformers '(company-sort-by-occurrence))
+
+;; cancel company explicitly
+(define-key company-active-map (kbd "C-g") 'company-abort)
+
 ;; python auto complete
 (require-install-nessary 'company-anaconda)
 (add-to-list 'company-backends 'company-anaconda)
 (add-hook 'python-mode-hook 'anaconda-mode)
 (add-hook 'python-mode-hook 'eldoc-mode)
 ;; js
+
 (require-install-nessary 'js2-mode)
 (require-install-nessary 'company-tern)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
@@ -299,6 +339,13 @@
 (add-to-list 'company-backends 'company-tern)
 (setq company-tern-property-marker "")
 (setq company-tern-meta-as-single-line t)
+(add-hook 'js2-mode-hook (lambda ()
+                           (subword-mode 1)))
+(after-load 'js2-mode
+  (setq js2-highlight-level 3
+        js2-basic-offset 2
+        js2-pretty-multiline-declarations t))
+(require-install-nessary 'json-mode)
 
 ;; smart-mode-line
 (require-install-nessary 'smart-mode-line)
@@ -311,8 +358,8 @@
 
 ;; ido mode
 (after-load 'ido
-	(ido-mode t)
-	(ido-everywhere t))
+  (ido-mode t)
+  (ido-everywhere t))
 (global-set-key (kbd "C-x C-f") 'ido-find-file)
 (require-install-nessary 'ido-ubiquitous)
 (ido-ubiquitous-mode 1)
@@ -322,10 +369,14 @@
 (setq gc-cons-threshold 20000000)
 (flx-ido-mode 1)
 
+(add-hook 'ido-setup-hook (lambda ()
+                            (define-key ido-completion-map (kbd "C-n") 'ido-next-match)
+                            (define-key ido-completion-map (kbd "C-p") 'ido-prev-match)))
+
 
 ;; in python, make word_count wordCount a word
 (add-hook 'python-mode-hook (lambda ()
-															(subword-mode 1)))
+                              (subword-mode 1)))
 
 ;; eldoc-mode
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
@@ -333,20 +384,23 @@
 
 ;; org-mode setting
 (setq org-startup-folded nil
-			org-src-fontify-natively t
-			org-src-tab-acts-natively t)
+      org-src-fontify-natively t
+      org-src-tab-acts-natively t)
+(require-install-nessary 'org-bullets)
+(add-hook 'org-mode-hook (lambda ()
+                           (org-bullets-mode 1)))
 
 ;; set shell coding
 (defadvice ansi-term (after ry/advise-ansi-term-coding-system activate)
-	(set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
+  (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
 
 ;; close buffer when quit shell
 (defadvice term-sentinel (around ry/advice-term-sentinel (proc msg) activate)
-	(if (memq (process-status proc) '(signal exit))
-			(let ((buffer (process-buffer proc)))
-				ad-do-it
-				(kill-buffer buffer))
-		ad-do-it))
+  (if (memq (process-status proc) '(signal exit))
+      (let ((buffer (process-buffer proc)))
+        ad-do-it
+        (kill-buffer buffer))
+    ad-do-it))
 
 ;; ediff option
 
@@ -357,9 +411,9 @@
 ;; export shell path
 (require-install-nessary 'exec-path-from-shell)
 (when (and (eq system-type 'darwin) (display-graphic-p))
-	(require-install-nessary 'exec-path-from-shell)
-	(setq exec-path-from-shell-variables '("PATH"  "MANPATH" "SHELL"))
-	(exec-path-from-shell-initialize))
+  (require-install-nessary 'exec-path-from-shell)
+  (setq exec-path-from-shell-variables '("PATH"  "MANPATH" "SHELL"))
+  (exec-path-from-shell-initialize))
 
 
 ;; smex
@@ -385,3 +439,31 @@
 (popwin-mode 1)
 
 
+(when (window-system)
+  (require-install-nessary 'git-gutter-fringe))
+(global-git-gutter-mode +1)
+(setq-default indicate-buffer-boundaries 'left)
+(setq-default indicate-empty-lines +1)
+
+;; ethan-wspace
+(require-install-nessary 'ethan-wspace)
+(setq mode-require-final-newline nil
+      require-final-newline nil)
+(global-ethan-wspace-mode 1)
+(evil-leader/set-key
+  "SPC" 'ethan-wspace-clean-all)
+
+;; Enhance C-x o when more than two window are open
+(require-install-nessary 'ace-window)
+(global-set-key (kbd "C-x o") 'ace-window)
+(global-set-key (kbd "C-x C-o") 'ace-swap-window)
+(evil-leader/set-key "K" (lambda ()
+                           (interactive)
+                           (save-excursion
+                             (other-window 1)
+                             (quit-window)
+                             (other-window 1))))
+
+;; snippet
+(require-install-nessary 'yasnippet)
+(yas-global-mode 1)
