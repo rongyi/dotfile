@@ -1,4 +1,5 @@
 ;; install evil mode
+;; yes, I know this is a all in one config, we will modulize it when time ready
 
 (defun require-install-nessary (pkg)
   (condition-case nil
