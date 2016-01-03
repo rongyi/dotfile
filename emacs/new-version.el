@@ -532,3 +532,26 @@
   :overlay-category 'flycheck-info-overlay
   :fringe-bitmap 'my-flycheck-fringe-indicator
   :fringe-face 'flycheck-fringe-info)
+
+
+(defun random-suffix ()
+  (let ((ret "")
+        (mycharset "1234567890ABCDEFGHIJKLMNOPQRSTYVWXYZ"))
+    (dotimes (i 8)
+      (let ((idx (random (length mycharset))))
+        (setq ret (concat ret (substring mycharset idx (1+ idx))))))
+    ret))
+
+(defun insert-include-guard()
+  (interactive)
+  (let ((prefix (concat
+                 (replace-regexp-in-string "[.-]" "_" (upcase (file-name-sans-extension (buffer-name))))
+                 "_"
+                 (random-suffix)
+                 "_H")))
+    (save-excursion
+      (beginning-of-buffer)
+      (insert (concat "#ifndef " prefix "\n"))
+      (insert (concat "#define " prefix "\n"))
+      (end-of-buffer)
+      (insert "\n#endif /* include guard end */\n"))))
