@@ -1,5 +1,4 @@
 ;; install evil mode
-;; yes, I know this is a all in one config, we will modulize it when time ready
 
 (defun require-install-nessary (pkg)
   (condition-case nil
@@ -48,7 +47,7 @@
 
 ;; full screen if needed
 ;;(toggle-frame-fullscreen)
-;;(toggle-frame-maximized)
+(toggle-frame-maximized)
 
 (scroll-bar-mode 0)
 (when (fboundp 'menu-bar-mode)
@@ -112,21 +111,29 @@
 
 (add-hook 'prog-mode-hook 'whitespace-mode)
 ;; highlight the word under the point
-(add-hook 'prog-mode-hook 'idle-highlight-mode)
+;;(add-hook 'prog-mode-hook 'idle-highlight-mode)
 (add-hook 'prog-mode-hook 'hl-line-mode)
 ;; highlight current line number
 (require-install-nessary 'hlinum)
 (hlinum-activate)
 ;; highlight matching braces
 (show-paren-mode 1)
+;; make copy and paste work properly under X Windows
+(when (eq system-type "gnu/linux")
+  (setq x-select-enable-clipboard t))
 
+(setq truncate-partial-width-windows nil)
+
+;; highlight the entire expression
+(setq show-paren-style 'expression)
+(mouse-avoidance-mode 'exile)
 
 ;; This isn't a typewriter (even if it is a terminal); one space after sentences,
 ;; please.
 (setq sentence-end-double-space nil)
 ;; font
-(set-frame-font "Source Code Pro for Powerline 12")
-(add-to-list 'default-frame-alist '(font . "Source Code Pro for Powerline 12"))
+(set-frame-font "Source Code Pro for Powerline 10")
+(add-to-list 'default-frame-alist '(font . "Source Code Pro for Powerline 10"))
 (add-hook 'after-make-frame-functions
           (lambda (new-frame)
             (set-fontset-font "fontset-default" 'han '("方正清刻本悦宋简体" . "unicode-bmp"))
@@ -172,7 +179,13 @@
 (eval-after-load 'evil
   '(progn
      (define-key evil-insert-state-map (kbd "M-.") 'insert-pointer-access)
-     (define-key evil-insert-state-map "\C-c" 'evil-normal-state)
+     (define-key evil-insert-state-map "\C-c" '(lambda ()
+                                                 (interactive)
+                                                 (save-excursion
+                                                   (evil-normal-state)
+                                                   (when (fboundp 'company-abort)
+                                                     (company-abort))
+                                                   )))
      (define-key evil-visual-state-map "\C-c" 'evil-normal-state)
      (define-key evil-normal-state-map "\C-e" 'evil-end-of-line)
      (define-key evil-normal-state-map "\C-a" 'evil-beginning-of-line)
@@ -213,6 +226,8 @@
      (setq evil-replace-state-cursor '("red" bar))
      (setq evil-operator-state-cursor '("red" hollow))))
 (evil-mode 1)
+;; int git commit message or org mode, we'll using evil when we needed
+(evil-set-initial-state 'text-mode 'emacs)
 
 ;; evil leader
 (require-install-nessary 'evil-leader)
@@ -252,10 +267,7 @@
           "helm-adapative-history"
           user-emacs-directory))
 
-(define-key helm-map (kbd "C-p") 'helm-execute-persistent-action)
-(define-key helm-map (kbd "C-n") 'helm-delete-minibuffer-contents)
-(define-key helm-map (kbd "C-j") 'helm-next-line)
-(define-key helm-map (kbd "C-k") 'helm-previous-line)
+(evil-leader/set-key "e" 'helm-semantic-or-imenu)
 
 ;; magit
 (require-install-nessary 'magit)
@@ -266,9 +278,9 @@
 
 
 ;; powerline
-;; (require-install-nessary 'powerline)
-;; (setq powerline-default-separator 'wave)
-;; (powerline-center-evil-theme)
+(require-install-nessary 'powerline)
+(setq powerline-default-separator 'wave)
+(powerline-center-evil-theme)
 
 ;; display time
 (setq display-time-24hr-format t)
@@ -352,13 +364,6 @@
         js2-pretty-multiline-declarations t))
 (require-install-nessary 'json-mode)
 
-;; smart-mode-line
-(require-install-nessary 'smart-mode-line)
-(setq sml/no-confirm-load-theme t)
-(sml/setup)
-(setq sml/theme 'light)
-(setq sml/shorten-directory t)
-(setq sml/shorten-modes t)
 
 
 ;; ido mode
@@ -462,6 +467,7 @@
 (require-install-nessary 'switch-window)
 (require-install-nessary 'ace-window)
 (global-set-key (kbd "C-x o") 'switch-window)
+(evil-leader/set-key "w" 'switch-window)
 (global-set-key (kbd "C-x C-o") 'ace-swap-window)
 (evil-leader/set-key "K" (lambda ()
                            (interactive)
@@ -473,6 +479,7 @@
 ;; snippet
 (require-install-nessary 'yasnippet)
 (yas-global-mode 1)
+(define-key yas-minor-mode-map (kbd "M-s-/") 'yas-expand)
 
 
 (defun comment-or-uncomment-line-or-region ()
@@ -556,3 +563,9 @@
       (insert (concat "#define " prefix "\n"))
       (end-of-buffer)
       (insert "\n#endif /* include guard end */\n"))))
+
+;; highlight TODO
+(add-hook 'prog-mode-hook (lambda ()
+                            (font-lock-add-keywords nil
+                                                    '(("\\<\\(FIXME\\|TODO\\|BUG\\):" 1 font-lock-warning-face t)))))
+(modify-syntax-entry ?_ "w")
