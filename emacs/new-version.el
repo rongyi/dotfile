@@ -85,6 +85,8 @@
 (set-keyboard-coding-system 'utf-8)
 (set-selection-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
+;; Treat clipboard input as UTF-8 string first; compound text next, etc.
+(setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
 
 ;; Flash the frame to represent a bell.
 (setq visible-bell t)
@@ -164,6 +166,14 @@
 
 (setq whitespace-style '(tailing))
 (global-whitespace-mode 1)
+
+;; subword-mode in prog-mode-hook
+(add-hook 'prog-mode-hook 'subword-mode)
+;; format linum
+(setq linum-format "%4d \u2502")
+
+;; Make sure script files are excutable after save
+(add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 
 
 
@@ -356,8 +366,6 @@
 (add-to-list 'company-backends 'company-tern)
 (setq company-tern-property-marker "")
 (setq company-tern-meta-as-single-line t)
-(add-hook 'js2-mode-hook (lambda ()
-                           (subword-mode 1)))
 (after-load 'js2-mode
   (setq js2-highlight-level 3
         js2-basic-offset 2
@@ -384,9 +392,6 @@
                             (define-key ido-completion-map (kbd "C-p") 'ido-prev-match)))
 
 
-;; in python, make word_count wordCount a word
-(add-hook 'python-mode-hook (lambda ()
-                              (subword-mode 1)))
 
 ;; eldoc-mode
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
@@ -569,3 +574,22 @@
                             (font-lock-add-keywords nil
                                                     '(("\\<\\(FIXME\\|TODO\\|BUG\\):" 1 font-lock-warning-face t)))))
 (modify-syntax-entry ?_ "w")
+
+;; http://slashusr.wordpress.com/2010/01/19/quickly-diff-the-changes-made-in-the-current-buffer-with-its-file/
+(defun ry/diff-buffer-file-changes ()
+  (interactive)
+  (diff-buffer-with-file (current-buffer)))
+;;; this over-rides 'text-scale-adjust, but that's also available on C-x C-+:
+(global-set-key (kbd "C-x C-=") 'ry/diff-buffer-file-changes)
+
+
+;; stole this from xemacs21:
+(defun switch-to-other-buffer (arg)
+  (interactive "p")
+  (if (eq arg 0)
+      (bury-buffer (current-buffer)))
+  (switch-to-buffer
+   (if (<= arg 1) (other-buffer (current-buffer))
+     (nth (1+ arg) (buffer-list)))))
+;; bind to C-M-l, just like in xemacs:
+(global-set-key (kbd "C-M-l") 'switch-to-other-buffer)
