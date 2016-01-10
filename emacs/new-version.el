@@ -235,9 +235,12 @@
      (setq evil-insert-state-cursor '("chartreuse3" bar))
      (setq evil-replace-state-cursor '("red" bar))
      (setq evil-operator-state-cursor '("red" hollow))))
+
 (evil-mode 1)
+
 ;; int git commit message or org mode, we'll using evil when we needed
 (evil-set-initial-state 'text-mode 'emacs)
+(evil-set-initial-state 'anaconda-mode-view-mode 'emacs)
 
 ;; evil leader
 (require-install-nessary 'evil-leader)
@@ -345,7 +348,8 @@
       company-dabbrev-downcase nil
       company-require-match nil
       company-show-numbers t
-      company-transformers '(company-sort-by-occurrence))
+      company-transformers '(company-sort-by-occurrence)
+      company-global-modes '(not term-mode))
 
 ;; cancel company explicitly
 (define-key company-active-map (kbd "C-g") 'company-abort)
@@ -355,6 +359,9 @@
 (add-to-list 'company-backends 'company-anaconda)
 (add-hook 'python-mode-hook 'anaconda-mode)
 (add-hook 'python-mode-hook 'eldoc-mode)
+(setq
+ python-shell-interpreter "python"
+ python-shell-interpreter-args "")
 ;; js
 
 (require-install-nessary 'js2-mode)
@@ -593,3 +600,31 @@
      (nth (1+ arg) (buffer-list)))))
 ;; bind to C-M-l, just like in xemacs:
 (global-set-key (kbd "C-M-l") 'switch-to-other-buffer)
+
+
+;; http://www.howardism.org/Technical/Emacs/eshell-fun.html
+(defun eshell-here ()
+  "Opens up a new shell in the directory associated with the
+current buffer's file. The eshell is renamed to match that
+directory to make multiple eshell windows easier."
+  (interactive)
+  (let* ((parent (if (buffer-file-name)
+                     (file-name-directory (buffer-file-name))
+                   default-directory))
+         (height (/ (window-total-height) 3))
+         (name   (car (last (split-string parent "/" t)))))
+    (split-window-vertically (- height))
+    (other-window 1)
+    (eshell "new")
+    (rename-buffer (concat "*eshell: " name "*"))
+
+    (insert (concat "ls"))
+    (eshell-send-input)
+    (company-mode -1)))
+
+(evil-leader/set-key "," 'eshell-here)
+
+(defun eshell/x ()
+  (insert "exit")
+  (eshell-send-input)
+  (delete-window))
