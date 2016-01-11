@@ -240,6 +240,7 @@
 
 ;; int git commit message or org mode, we'll using evil when we needed
 (evil-set-initial-state 'text-mode 'emacs)
+(evil-set-initial-state 'org-mode 'emacs)
 (evil-set-initial-state 'anaconda-mode-view-mode 'emacs)
 
 ;; evil leader
