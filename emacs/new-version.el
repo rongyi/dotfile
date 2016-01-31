@@ -629,3 +629,79 @@ directory to make multiple eshell windows easier."
   (insert "exit")
   (eshell-send-input)
   (delete-window))
+
+
+(defun newline-for-code ()
+  "Inserts a newline character, but from the end of the current line."
+  (interactive)
+  (move-end-of-line 1)
+  (newline-and-indent))
+(global-set-key (kbd "M-RET") 'newline-for-code)
+
+
+(defun smarter-move-beginning-of-line (arg)
+  "Move point back to indentation of beginning of line
+
+If arg is not nill or 1, move forward ARG - 1 lines first."
+  (interactive "^p")
+  (setq arg (or arg 1))
+
+  (when (/= arg 1)
+    (let ((line-move-visual nil))
+      (forward-line (1- arg))))
+
+  (let ((orig-point (point)))
+    (back-to-indentation)
+    (when (= orig-point (point))
+      (move-beginning-of-line 1))))
+
+(global-set-key [remap move-beginning-of-line] 'smarter-move-beginning-of-line)
+
+
+(defun surround (start end txt)
+  "Wraps the specified region (or the current 'symbol / word'
+     with some textual markers that this function requests from the
+     user. Opening-type text, like parens and angle-brackets will
+     insert the matching closing symbol.
+
+     This function also supports some org-mode wrappers:
+
+       - `#s` wraps the region in a source code block
+       - `#e` wraps it in an example block
+       - `#q` wraps it in an quote block"
+  (interactive "r\nsEnter text to surround: " start end txt)
+
+  ;; If the region is not active, we use the 'thing-at-point' function
+  ;; to get a "symbol" (often a variable or a single word in text),
+  ;; and use that as our region.
+
+  (if (not (region-active-p))
+      (let ((new-region (bounds-of-thing-at-point 'symbol)))
+        (setq start (car new-region))
+        (setq end (cdr new-region))))
+
+  ;; We create a table of "odd balls" where the front and the end are
+  ;; not the same string.
+  (let* ((s-table '(("#e" . ("#+BEGIN_EXAMPLE\n" "\n#+END_EXAMPLE") )
+                    ("#s" . ("#+BEGIN_SRC \n"    "\n#+END_SRC") )
+                    ("#q" . ("#+BEGIN_QUOTE\n"   "\n#+END_QUOTE"))
+                    ("<"  . ("<" ">"))
+                    ("("  . ("(" ")"))
+                    ("{"  . ("{" "}"))
+                    ("["  . ("[" "]"))))    ; Why yes, we'll add more
+         (s-pair (assoc-default txt s-table)))
+
+    ;; If txt doesn't match a table entry, then the pair will just be
+    ;; the text for both the front and the back...
+    (unless s-pair
+      (setq s-pair (list txt txt)))
+
+    (save-excursion
+      (narrow-to-region start end)
+      (goto-char (point-min))
+      (insert (car s-pair))
+      (goto-char (point-max))
+      (insert (cadr s-pair))
+      (widen))))
+
+(global-set-key (kbd "C-+") 'surround)
