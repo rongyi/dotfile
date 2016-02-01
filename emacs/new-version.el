@@ -286,6 +286,7 @@
 ;; magit
 (require-install-nessary 'magit)
 (evil-leader/set-key "g" 'magit-status)
+(global-set-key (kbd "<f2>") 'magit-status)
 (setq magit-commit-arguments '("--verbose"))
 ;; to be tested
 ;;(require-install-nessary 'magit-find-file)
