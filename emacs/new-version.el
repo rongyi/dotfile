@@ -336,6 +336,7 @@
 ;; smartpare
 
 (require-install-nessary 'smartparens)
+(require 'smartparens-config)
 (add-hook 'prog-mode-hook #'smartparens-mode)
 
 ;; company
