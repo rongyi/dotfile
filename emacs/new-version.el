@@ -111,7 +111,12 @@
 ;; use ibuffer for list buffer
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
-(add-hook 'prog-mode-hook 'whitespace-mode)
+;; http://emacsredux.com/blog/2013/05/31/highlight-lines-that-exceed-a-certain-length-limit/
+;; (require 'whitespace)
+;; (setq whitespace-line-column 80)
+;; (setq whitespace-style '(face lines-tail))
+
+;; (add-hook 'prog-mode-hook 'whitespace-mode)
 ;; highlight the word under the point
 ;;(add-hook 'prog-mode-hook 'idle-highlight-mode)
 (add-hook 'prog-mode-hook 'hl-line-mode)
@@ -287,6 +292,7 @@
 (require-install-nessary 'magit)
 (evil-leader/set-key "g" 'magit-status)
 (global-set-key (kbd "<f2>") 'magit-status)
+(global-set-key (kbd "C-x g") 'magit-status)
 (setq magit-commit-arguments '("--verbose"))
 ;; to be tested
 ;;(require-install-nessary 'magit-find-file)
@@ -333,7 +339,7 @@
 (require-install-nessary 'rainbow-delimiters)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 
-;; smartpare
+;; smartparen
 
 (require-install-nessary 'smartparens)
 (require 'smartparens-config)
@@ -707,3 +713,7 @@ If arg is not nill or 1, move forward ARG - 1 lines first."
       (widen))))
 
 (global-set-key (kbd "C-+") 'surround)
+
+(setq inferior-lisp-program "/usr/bin/clisp")
+
+(global-set-key (kbd "C-x f") 'toggle-frame-maximized)
