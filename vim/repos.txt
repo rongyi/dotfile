@@ -1,5 +1,6 @@
 https://github.com/rking/ag.vim.git
 https://github.com/vim-scripts/Auto-Pairs.git
+https://github.com/chriskempson/base16-vim.git
 https://github.com/kien/ctrlp.vim.git
 https://github.com/Raimondi/delimitMate.git
 https://github.com/thinkpixellab/flatland.git
@@ -21,6 +22,7 @@ https://github.com/tomtom/tcomment_vim.git
 https://github.com/marijnh/tern_for_vim.git
 https://github.com/SirVer/ultisnips.git
 https://github.com/bling/vim-airline
+https://github.com/vim-airline/vim-airline-themes.git
 https://github.com/altercation/vim-colors-solarized.git
 https://github.com/hail2u/vim-css3-syntax.git
 https://github.com/ap/vim-css-color.git
@@ -41,5 +43,3 @@ https://github.com/rongyi/vim-snippets.git
 https://github.com/tpope/vim-surround.git
 https://github.com/Valloric/xmledit.git
 https://github.com/Valloric/YouCompleteMe.git
-https://github.com/chriskempson/base16-vim.git
-https://github.com/jeaye/color_coded.git
