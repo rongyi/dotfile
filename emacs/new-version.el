@@ -181,7 +181,7 @@
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 
 
-
+;; it is a unit in c/c++, and type this two key is so slow, so we need a map
 (defun insert-pointer-access ()
   (interactive)
   (insert "->"))
@@ -443,7 +443,7 @@
 (require-install-nessary 'exec-path-from-shell)
 (when (and (eq system-type 'darwin) (display-graphic-p))
   (require-install-nessary 'exec-path-from-shell)
-  (setq exec-path-from-shell-variables '("PATH"  "MANPATH" "SHELL"))
+  (setq exec-path-from-shell-variables '("PATH"  "MANPATH" "SHELL" "GOPATH"))
   (exec-path-from-shell-initialize))
 
 
@@ -487,9 +487,12 @@
 ;; Enhance C-x o when more than two window are open
 (require-install-nessary 'switch-window)
 (require-install-nessary 'ace-window)
-(global-set-key (kbd "C-x o") 'switch-window)
-(evil-leader/set-key "w" 'switch-window)
-(global-set-key (kbd "C-x C-o") 'ace-swap-window)
+;; the key "combo" is fast than the least used C-x o
+;; so we decide to make a change with swap hot key
+(global-set-key (kbd "C-x C-o") 'ace-window)
+(evil-leader/set-key "w" 'ace-window)
+;; it seems like we dont need swap window frequently
+(global-set-key (kbd "C-x o") 'ace-window)
 (evil-leader/set-key "K" (lambda ()
                            (interactive)
                            (save-excursion
@@ -717,3 +720,34 @@ If arg is not nill or 1, move forward ARG - 1 lines first."
 (setq inferior-lisp-program "/usr/bin/clisp")
 
 (global-set-key (kbd "C-x f") 'toggle-frame-maximized)
+
+;; steal from prelude
+(defun ry/open-line-above ()
+  "insert an empty line above current line"
+  (interactive)
+  (move-beginning-of-line nil)
+  (newline-and-indent)
+  (forward-line -1)
+  (indent-according-to-mode))
+(define-key evil-insert-state-map (kbd "C-o") 'ry/open-line-above)
+
+;; golang config
+(require-install-nessary 'go-mode)
+(add-hook 'before-save-hook 'gofmt-before-save)
+;; go auto complete
+(require-install-nessary 'company-go)
+(add-hook 'go-mode-hook (lambda ()
+  (set (make-local-variable 'company-backends) '(company-go))
+  (company-mode)))
+;; the same key as show python function doc in anaconda mode
+(define-key go-mode-map (kbd "M-?") 'godoc-at-point)
+(require-install-nessary 'go-eldoc)
+(add-hook 'go-mode-hook 'go-eldoc-setup)
+(define-key go-mode-map (kbd "M-=") (lambda ()
+                                      (interactive)
+                                      (insert ":=")))
+(define-key go-mode-map (kbd "M-<") (lambda ()
+                                      (interactive)
+                                      (insert "<-")))
+(define-key shell-mode-map (kbd "C-n") 'comint-next-input)
+(define-key shell-mode-map (kbd "C-p") 'comint-previous-input)
