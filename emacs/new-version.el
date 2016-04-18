@@ -284,8 +284,8 @@
   (ido-buffer-internal 'display 'display-buffer nil nil nil 'ignore))
 (setq helm-display-function 'helm-default-display-buffer)
 (setq helm-adaptive-history-file (expand-file-name
-                                  "helm-adapative-history"
-                                  user-emacs-directory))
+          "helm-adapative-history"
+          user-emacs-directory))
 
 (evil-leader/set-key "e" 'helm-semantic-or-imenu)
 
@@ -738,8 +738,8 @@ If arg is not nill or 1, move forward ARG - 1 lines first."
 ;; go auto complete
 (require-install-nessary 'company-go)
 (add-hook 'go-mode-hook (lambda ()
-                          (set (make-local-variable 'company-backends) '(company-go))
-                          (company-mode)))
+  (set (make-local-variable 'company-backends) '(company-go))
+  (company-mode)))
 ;; the same key as show python function doc in anaconda mode
 (define-key go-mode-map (kbd "M-?") 'godoc-at-point)
 (require-install-nessary 'go-eldoc)
@@ -755,6 +755,9 @@ If arg is not nill or 1, move forward ARG - 1 lines first."
 (add-hook 'shell-mode-hook (lambda ()
                              (company-mode -1)
                              (yas-minor-mode -1)))
+(defun lint-code ()
+  (interactive)
+  (insert (format "// http://www.lintcode.com/zh-cn/problem/%s\n" (file-name-sans-extension (buffer-name)))))
 
 
 ;; add more for tab
