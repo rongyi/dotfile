@@ -247,6 +247,7 @@
 (evil-set-initial-state 'text-mode 'emacs)
 (evil-set-initial-state 'org-mode 'emacs)
 (evil-set-initial-state 'anaconda-mode-view-mode 'emacs)
+(evil-set-initial-state 'shell-mode 'emacs)
 
 ;; evil leader
 (require-install-nessary 'evil-leader)
@@ -283,8 +284,8 @@
   (ido-buffer-internal 'display 'display-buffer nil nil nil 'ignore))
 (setq helm-display-function 'helm-default-display-buffer)
 (setq helm-adaptive-history-file (expand-file-name
-          "helm-adapative-history"
-          user-emacs-directory))
+                                  "helm-adapative-history"
+                                  user-emacs-directory))
 
 (evil-leader/set-key "e" 'helm-semantic-or-imenu)
 
@@ -737,8 +738,8 @@ If arg is not nill or 1, move forward ARG - 1 lines first."
 ;; go auto complete
 (require-install-nessary 'company-go)
 (add-hook 'go-mode-hook (lambda ()
-  (set (make-local-variable 'company-backends) '(company-go))
-  (company-mode)))
+                          (set (make-local-variable 'company-backends) '(company-go))
+                          (company-mode)))
 ;; the same key as show python function doc in anaconda mode
 (define-key go-mode-map (kbd "M-?") 'godoc-at-point)
 (require-install-nessary 'go-eldoc)
@@ -751,3 +752,67 @@ If arg is not nill or 1, move forward ARG - 1 lines first."
                                       (insert "<-")))
 (define-key shell-mode-map (kbd "C-n") 'comint-next-input)
 (define-key shell-mode-map (kbd "C-p") 'comint-previous-input)
+(add-hook 'shell-mode-hook (lambda ()
+                             (company-mode -1)
+                             (yas-minor-mode -1)))
+
+
+;; add more for tab
+(setq tab-always-indent 'complete)
+
+;; fast open shell init file
+(defun find-shell-init-file  ()
+  "Edit the shell init file in another window"
+  (interactive)
+  (let* ((shell (car (reverse (split-string (getenv "SHELL") "/"))))
+         (shell-init-file (cond
+                           ((string-equal "zsh" shell) ".zshrc")
+                           ((string-equal "bash" shell) ".bashrc")
+                           (t (error "Unkown shell")))))
+    (find-file-other-window (expand-file-name shell-init-file (getenv "HOME")))))
+
+
+(defun find-user-init-file ()
+  "Edit the `user-init-file', in another window"
+  (interactive)
+  (find-file-other-window user-init-file))
+
+(add-hook 'before-save-hook 'whitespace-cleanup)
+
+
+(defun visit-term-buffer ()
+  "Create or visit a terminal buffer"
+  (interactive)
+  (if (not (get-buffer "*shell*"))
+      (progn
+        (split-window-sensibly (selected-window))
+        (other-window 1)
+        (shell (getenv "SHELL")))
+    (switch-to-buffer-other-window "*shell*")))
+
+;; indent utility
+(defun indent-defun()
+  "Ident the current defun"
+  (interactive)
+  (save-excursion
+    (mark-defun)
+    (indent-region (region-beginning) (region-end))))
+
+(defun indent-buffer ()
+  "Indent the currently visited buffer"
+  (interactive)
+  (indent-region (point-min) (point-max)))
+
+(defun indent-region-or-buffer ()
+  "Indent a region if selected, otherwise the whole buffer"
+  (interactive)
+  (save-excursion
+    (if (region-active-p)
+        (progn
+          (indent-region (region-beginning) (region-end))
+          (message "Indented selected region."))
+      (progn
+        (indent-buffer)
+        (message "Indented buffer")))))
+
+(global-set-key (kbd "C-M-\\") 'indent-region-or-buffer)
