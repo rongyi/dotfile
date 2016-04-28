@@ -22,3 +22,4 @@ cp -r ./whitespace $HOME/.vim/bundle
 #vimrc file
 cp vimrc $HOME/.vimrc
 cp gvimrc $HOME/.gvimrc
+cp  -r ./colors/ ~/.vim/
