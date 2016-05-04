@@ -1,7 +1,0 @@
-* try config emacs line by line by stealing code from
-  + [[https://github.com/purcell/emacs.d][Purcell's emacs.d]]
-  + [[https://github.com/bbatsov/prelude][Prelude]]
-  + [[https://github.com/technomancy/emacs-starter-kit][Emacs starter kit]]
-
-
-  new-version is my own version of emacs conf
