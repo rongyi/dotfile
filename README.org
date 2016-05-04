@@ -1,7 +1,6 @@
 * Description:
-  dot file of
+  dot files of
   + shell(zsh)
   + tmux
   + vim
   + mplayer
-  + emacs
