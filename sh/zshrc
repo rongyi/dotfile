@@ -41,20 +41,29 @@ alias j='jobs'
 alias valgrind='valgrind --leak-check=full --show-reachable=yes'
 #zlib evn
 
-export SNIP=/home/ry/.vim/bundle/ultisnips/UltiSnips
-export DOT=/home/ry/Documents/github/dotfile
 # Customize to your needs...
 
 alias Ai='sudo apt-get install'
 alias As='apt-cache search'
 alias lcc='g++ -g -std=c++11'
 alias f='find . -name '
+alias u='source ~/.zshrc'
 
 alias -s c=gvim
 alias -s h=gvim
 alias -s cc=gvim
 alias -s cpp=gvim
 alias tmux='tmux -2'
+alias g='git status -sb'
+
+export GOROOT=/usr/local/go
+export PATH=$PATH:$GOROOT/bin
+
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin/
+
+
+
 
 
 
