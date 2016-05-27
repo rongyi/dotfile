@@ -1,0 +1,7 @@
+* Python
+  #+BEGIN_SRC bash
+  ~/.pydistutils.cfg
+[install]
+prefix=
+
+  #+END_SRC
