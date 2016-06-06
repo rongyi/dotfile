@@ -2,7 +2,7 @@ set background=light
 color solarized
 nmap \b :colorscheme Tomorrow-Night-Eighties <CR>
 
-set lines=35 columns=93
+set lines=32 columns=97
 " With this, the gui (gvim and macvim) now doesn't have the toolbar, the left
 " and right scrollbars and the menu.
 set guioptions-=T
@@ -53,3 +53,5 @@ set guitablabel=%N\ %t\ %m
 imap ® ->
 "add & in a -> expression
 imap <c-y> <ESC>bbbi&<ESC>f)i
+
+set expandtab
