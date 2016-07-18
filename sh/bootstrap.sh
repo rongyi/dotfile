@@ -20,3 +20,6 @@ sudo make install
 
 # silver searcher
 git clone https://github.com/ggreer/the_silver_searcher.git
+
+# python lib
+pip install yapf
