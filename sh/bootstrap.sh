@@ -23,3 +23,7 @@ git clone https://github.com/ggreer/the_silver_searcher.git
 
 # python lib
 pip install yapf
+
+# gnome terminal theme
+# dracular: https://github.com/Mayccoll/Gogh/blob/master/content/themes.md
+wget -O xt  http://git.io/v3D8e && chmod +x xt && ./xt && rm xt
