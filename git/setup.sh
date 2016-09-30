@@ -3,7 +3,7 @@
 cp ./gitignore ~/.gitignore
 #basic
 git config --global user.name "rongyi"
-git config --global user.email "rongyi@ucloud.cn"
+git config --global user.email "sqrongyi@163.com"
 git config --global color.ui true
 #ignore file perm change
 git config --global core.fileMode false
