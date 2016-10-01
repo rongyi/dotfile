@@ -20,7 +20,7 @@ if __name__ == '__main__':
         remote_path = os.path.join(REMOTE_HOME, rela_cwd)
     else:
         remote_path = cwd
-    cmd_tmpl = 'scp -r %s rongyi@192.168.8.163:%s'
+    cmd_tmpl = 'scp -r %s rongyi@XXX.XXX.X.XXX:%s'
     cmds = []
     for i in xrange(argc - 1):
         cmds.append(cmd_tmpl % (sys.argv[i + 1], remote_path))
