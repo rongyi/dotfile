@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-"""Disable notebook main keyboard:
+"""Disable a notebook's main keyboard:
 http://askubuntu.com/questions/160945/is-there-a-way-to-disable-a-laptops-internal-keyboard,
 """
 
@@ -33,11 +33,12 @@ def parse_list(raw):
     return (the_id, master_number)
 
 
-
 def run_cmd(cmd, live=False, readsize=10):
     # readsize = 10
     cmdargs = shlex.split(cmd)
-    p = subprocess.Popen(cmdargs, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p = subprocess.Popen(cmdargs,
+                         stdout=subprocess.PIPE,
+                         stderr=subprocess.PIPE)
 
     stdout = ''
     stderr = ''
