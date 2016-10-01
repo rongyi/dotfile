@@ -3,4 +3,5 @@
   + shell(zsh)
   + tmux
   + vim
+  + latex template
   + mplayer
