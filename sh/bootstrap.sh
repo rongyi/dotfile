@@ -6,7 +6,7 @@ sudo apt-get install -y build-essential emacs git gnome-terminal libatk1.0-dev l
 # silver searcher
 git clone https://github.com/ggreer/the_silver_searcher.git
 
-# Emacs is now favorite, latest vim is not needed
+# Emacs is now my favorite, latest vim is not needed
 # cd ~
 # git clone https://github.com/vim/vim.git
 # cd vim
