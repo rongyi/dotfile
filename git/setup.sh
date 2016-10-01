@@ -42,4 +42,3 @@ git config --global core.autocrlf input
 
 # add global ignore file
 git config --global core.excludesfile ~/.gitignore
-
