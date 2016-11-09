@@ -83,7 +83,7 @@ if __name__ == '__main__':
     id = parse_ret[0]
     rc, _, _ = run_cmd(DISABLE_CMD_TMPL % id)
     if rc == 0:
-        sys.stdout.write('disable main keyboard success\n')
+        sys.stdout.write('You may now put your mechanical keyboard on your laptop\n')
     else:
         sys.stderr.write('disable main keyboard fail\n')
         sys.exit(-1)
