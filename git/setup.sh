@@ -9,7 +9,7 @@ git config --global color.ui true
 git config --global core.fileMode false
 #put vim open with insert mode, so that I can input commit message fast, if you like Emacs,
 #you can use 'emacsclient -c' instead, but you beter start a Emacs daemon first.
-git config --global core.editor vim -c 'startinsert'
+git config --global core.editor 'vim -c startinsert'
 # OMG! you need proxy to access git repo?
 #git config --global http.proxy '192.168.1.99:8762'
 #alias
