@@ -40,4 +40,6 @@ wget -c http://ftp.twaren.net/Unix/GNU/gnu/emacs/emacs-25.1.tar.gz
 echo "Downloading gtags"
 wget -c http://tamacom.com/global/global-6.5.5.tar.gz
 
+# install c++doc e.g. libstdc++-4.9-doc
+
 echo "You can build thest source code now, your highness"
