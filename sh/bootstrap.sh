@@ -7,6 +7,8 @@ sudo apt-get install -y build-essential emacs git gnome-terminal libatk1.0-dev l
 
 # silver searcher
 git clone https://github.com/ggreer/the_silver_searcher.git
+# oh my zsh
+git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
 
 # Emacs is now my favorite, latest vim is not needed, or I use Vim in Emacs :)
 # cd ~
