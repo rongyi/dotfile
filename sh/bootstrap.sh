@@ -45,4 +45,7 @@ wget -c http://tamacom.com/global/global-6.5.5.tar.gz
 
 # install c++doc e.g. libstdc++-4.9-doc
 
+# install ycmd
+git clone https://github.com/Valloric/ycmd.git
+
 echo "You can build thest source code now, your highness"
