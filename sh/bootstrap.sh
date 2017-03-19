@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # 2017年03月18日 星期六 15时46分47秒
+# execute the script as root please
 
 # packages for dev
 sudo apt-get install -y build-essential emacs git gnome-terminal libatk1.0-dev libbonoboui2-dev libcairo2-dev libcurl3 libcurl4-openssl-dev libexpat1-dev libexpat1-dev libgif-dev libgnome2-dev libgnomeui-dev libgnutls-dev libgtk2.0-dev libjpeg8-dev libncurses5-dev libpcre3-dev libpng++-dev libssh-dev libtiff5-dev libx11-dev libxaw7-dev libxpm-dev libxt-dev openssh-server python-dev ruby-dev xaw3dg-dev zsh exuberant-ctags libtool automake python-pip cmake libevent-dev vim tmux curl unrar
@@ -47,5 +48,16 @@ wget -c http://tamacom.com/global/global-6.5.5.tar.gz
 
 # install ycmd
 git clone https://github.com/Valloric/ycmd.git
+
+# haskell setting
+sudo apt-get update
+sudo apt-get install -y software-properties-common
+sudo add-apt-repository -y ppa:hvr/ghc
+sudo apt-get update
+sudo apt-get install -y cabal-install-1.22 ghc-7.10.3
+cat >> ~/.zshrc <<EOF
+export PATH="\$HOME/.cabal/bin:/opt/cabal/1.22/bin:/opt/ghc/7.10.3/bin:\$PATH"
+EOF
+export PATH=~/.cabal/bin:/opt/cabal/1.22/bin:/opt/ghc/7.10.3/bin:$PATH
 
 echo "You can build thest source code now, your highness"
