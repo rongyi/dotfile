@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 2017年03月18日 星期六 15时46分47秒
+# 2017年03月18日 星期六
 # execute the script as root please
 
 # packages for dev
@@ -59,5 +59,8 @@ cat >> ~/.zshrc <<EOF
 export PATH="\$HOME/.cabal/bin:/opt/cabal/1.22/bin:/opt/ghc/7.10.3/bin:\$PATH"
 EOF
 export PATH=~/.cabal/bin:/opt/cabal/1.22/bin:/opt/ghc/7.10.3/bin:$PATH
+
+# FlameGraph
+git clone git@github.com:brendangregg/FlameGraph.git /usr/local/FlameGraph/
 
 echo "You can build thest source code now, your highness"
