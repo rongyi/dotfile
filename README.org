@@ -2,6 +2,6 @@
   dot files of
   + shell(zsh)
   + tmux
-  + vim
+  + vim (emacs is my favorite now, so the configuration here is pretty old now)
   + latex template
   + mplayer
