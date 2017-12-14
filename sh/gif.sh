@@ -11,4 +11,4 @@ echo $Y
 echo $W
 echo $H
 
-byzanz-record -c --verbose --delay=0 --duration=15 --x="$X" --y="$Y" --width="$W" --height="$H" "/tmp/out.gif"
+byzanz-record -c --verbose --delay=0 --duration=10 --x="$X" --y="$Y" --width="$W" --height="$H" "/tmp/out.gif"
