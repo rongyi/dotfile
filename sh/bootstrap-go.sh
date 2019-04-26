@@ -1,7 +1,9 @@
 #!/bin/bash
 
 #editor related
-go get -u -v github.com/nsf/gocode
+# no longer maintained
+#go get -u -v github.com/nsf/gocode
+go get -u -v github.com/mdempsky/gocode
 go get -u -v github.com/rogpeppe/godef
 go get -u -v golang.org/x/tools/cmd/guru
 go get -u github.com/golang/lint/golint
