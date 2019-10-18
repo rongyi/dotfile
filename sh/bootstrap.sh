@@ -47,6 +47,8 @@ wget -c http://tamacom.com/global/global-6.5.5.tar.gz
 # install c++doc e.g. libstdc++-4.9-doc
 
 # install ycmd
+# using this commit: 8c4520832e59336163e0ae7b7f41a76a2fed21be
+# the latest commit using go-pls which sucks
 git clone https://github.com/Valloric/ycmd.git
 
 # haskell setting
