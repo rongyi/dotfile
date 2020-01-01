@@ -3,7 +3,7 @@
 #to English subtitle
 
 TIME_DURATION="00:00:00,000 --> 03:00:15,000"
-SHADOW_ELM="▥▥▥▥▥▥▥▥▥▥▥▥▥▥█▥▥▥▥▥▥▥▥▥▥▥▥▥▥▥▥▥▥▥▥▥▥▥▥▥▥▥▥▥▥▥▥▥▥▥▥▥▥"
+SHADOW_ELM="█████████████████████████████████████████████"
 # I don't want to copy a src file to a specific place, instead, I create it
 # everytime when I execute this script.
 SHADOW_FILE="/tmp/mplayer-shadow.srt"
