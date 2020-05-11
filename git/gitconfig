@@ -1,29 +1,31 @@
 [alias]
-	ls = status -sb
-	cm = commit
-	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
-	co = checkout
-	praise = blame
+  ls = status -sb
+  cm = commit
+  lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
+  co = checkout
 [core]
-	ediotr = vim
-	autocrlf = input
-	fileMode = false
-	editor = vim -c 'startinsert'
+  ediotr = vim
+  autocrlf = input
+  fileMode = false
+  editor = vim -c 'startinsert'
+  pager = delta --theme OneHalfLight
 [user]
-	name = rongyi
-	email = TODO
+  name = rongyi
+  email = rongyi@onchain.com
 [color]
-	ui = true
+  ui = true
 [branch]
-	autosetuprebase = always
+  autosetuprebase = always
 [pull]
-	rebase = true
+  rebase = true
 [push]
-	default = upstream
+  default = upstream
 [diff]
-	guitool = meld
-	tool = meld
+  guitool = meld
+  tool = meld
 [difftool]
-	prompt = false
+  prompt = false
 [credential]
-	helper = cache --timeout=36000
+  helper = cache --timeout=54000
+[interactive]
+  diffFilter = delta --theme OneHalfLight
