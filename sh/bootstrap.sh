@@ -42,7 +42,7 @@ wget -O xt  http://git.io/v3D8e && chmod +x xt && ./xt && rm xt
 
 # download emacs 25 from https://www.gnu.org/software/emacs/download.html
 echo "Downloading the latest emacs"
-wget -c http://ftp.twaren.net/Unix/GNU/gnu/emacs/emacs-25.1.tar.gz
+wget -c http://ftp.twaren.net/Unix/GNU/gnu/emacs/emacs-26.3.tar.gz
 
 echo "Downloading gtags"
 wget -c http://tamacom.com/global/global-6.5.5.tar.gz
@@ -67,5 +67,7 @@ export PATH=~/.cabal/bin:/opt/cabal/1.22/bin:/opt/ghc/7.10.3/bin:$PATH
 
 # FlameGraph
 git clone git@github.com:brendangregg/FlameGraph.git /usr/local/FlameGraph/
+
+# 在搜狗输入法配置里 -> 附加组件 -> 键盘布局 -> 切换单词提示 (去掉快捷键 ESC去掉)
 
 echo "You can build thest source code now, your highness"
