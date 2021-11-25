@@ -9,14 +9,14 @@ Plug 'simrat39/rust-tools.nvim'
 " Optional dependencies
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
+"Plug 'nvim-telescope/telescope.nvim'
 " Debugging (needs plenary from above as well)
 Plug 'mfussenegger/nvim-dap'
 " Plugin outside ~/.vim/plugged with post-update hook
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'Mofiqul/dracula.nvim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'jiangmiao/auto-pairs'
+Plug 'liuchengxu/vista.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -27,10 +27,13 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 " rainbow paren
 Plug 'luochen1990/rainbow'
+Plug 'rust-lang/rust.vim'
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'jremmen/vim-ripgrep'
+Plug 'easymotion/vim-easymotion'
+Plug 'rhysd/vim-clang-format'
 
 " Initialize plugin system
 call plug#end()
@@ -255,7 +258,6 @@ cmap w!! w !sudo tee >/dev/null %
 
 "leader setting
 let mapleader=','
-
 " in case miss type
 map Q <silent>
 map q: <silent>
@@ -270,11 +272,18 @@ imap <C-F4> <ESC>:wqall<CR>
 " some emacs like key bindings
 imap <C-f>         <Right>
 imap <C-e>         <End>
+nmap <C-e>         <End>
 imap <C-b>         <Left>
-imap <C-a>         <Home>
+imap <C-a>         <ESC>I
+" plus 1 is pain in the ass
+nmap <C-a>         <ESC>^
 imap <A-x>         <ESC>:
 nmap <A-x>         <ESC>:
 imap <C-backspace> <C-w>
+inoremap <C-.>  ->
+" rust sugar
+inoremap <C-=>  =>
+inoremap <C-;> // 
 "You should notice we use 'b' for mark anchor
 nmap     <C-l>         mbz.`b
 inoremap <C-l>         <ESC>mbz.`ba
@@ -301,7 +310,7 @@ set autoread
 " ====== plug config =====
 
 " fzf
-nmap <C-P> :FZF<CR>
+nmap <leader>p :FZF<CR>
 
 colorscheme dracula
 
@@ -310,15 +319,29 @@ colorscheme dracula
 let g:rainbow_active = 1
 
 " neovide
+let g:neovide_transparency=0.8
 let g:neovide_cursor_animation_length=0.13
 let g:neovide_cursor_trail_length=0.8
 let g:neovide_cursor_antialiasing=v:true
-let g:neovide_cursor_vfx_mode = "railgun"
+let g:neovide_cursor_vfx_mode = "ripple"
+let g:neovide_remember_window_size = v:true
 
 
 " ag(silver_searcher) vim bundle
 " bind a shorcut for using silver_search to search the word under cursor
 nmap <C-k> :Rg "\b<cword>\b" <CR>
 " wait for user input
-nmap <leader>s  :Rg 
+nmap <leader>s  :Rg
 
+" easy motion
+map  <Leader>f <Plug>(easymotion-bd-f)
+nmap <Leader>f <Plug>(easymotion-overwin-f)
+nmap <Leader>t :ClangFormat<CR>
+" rust
+"let g:rustfmt_autosave = 1
+" tag
+nmap <leader>e :Vista!!<CR>
+
+
+autocmd FileType cpp          nnoremap <buffer> <Leader>t :ClangFormat<CR>
+autocmd FileType rust         nnoremap <buffer> <Leader>t :RustFmt<CR>
