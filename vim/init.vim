@@ -79,7 +79,8 @@ inoremap <silent><expr> <D-n>
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
 inoremap <expr><D-p> pumvisible() ? "\<C-p>" : "\<C-h>"
-
+let g:coc_snippet_next = '<D-j>'
+let g:coc_snippet_prev = '<D-k>'
 " same as my emacs
 inoremap <silent><expr> <TAB> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
 
