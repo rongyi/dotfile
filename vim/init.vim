@@ -9,13 +9,14 @@ Plug 'simrat39/rust-tools.nvim'
 " Optional dependencies
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
+"Plug 'nvim-telescope/telescope.nvim'
 " Debugging (needs plenary from above as well)
 Plug 'mfussenegger/nvim-dap'
 " Plugin outside ~/.vim/plugged with post-update hook
 Plug 'Mofiqul/dracula.nvim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'jiangmiao/auto-pairs'
+Plug 'liuchengxu/vista.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -26,6 +27,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 " rainbow paren
 Plug 'luochen1990/rainbow'
+Plug 'rust-lang/rust.vim'
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -72,11 +74,14 @@ endif
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
-inoremap <silent><expr> <TAB>
+inoremap <silent><expr> <D-n>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr><D-p> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+" same as my emacs
+inoremap <silent><expr> <TAB> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
 
 function! s:check_back_space() abort
   let col = col('.') - 1
@@ -278,8 +283,13 @@ nmap <C-a>         <ESC>^
 imap <A-x>         <ESC>:
 nmap <A-x>         <ESC>:
 imap <C-backspace> <C-w>
-inoremap <C-.>  ->
-inoremap <C-/> // 
+inoremap <C-.> ->
+inoremap <D-.> ->
+" rust sugar
+inoremap <C-=> =>
+inoremap <D-=> =>
+inoremap <C-;> // 
+inoremap <D-;> // 
 "You should notice we use 'b' for mark anchor
 nmap     <C-l>         mbz.`b
 inoremap <C-l>         <ESC>mbz.`ba
@@ -320,15 +330,32 @@ let g:neovide_cursor_animation_length=0.13
 let g:neovide_cursor_trail_length=0.8
 let g:neovide_cursor_antialiasing=v:true
 let g:neovide_cursor_vfx_mode = "ripple"
+let g:neovide_remember_window_size = v:true
+" take my emacs config to here
+let g:neovide_input_use_logo = v:true
 
 
 " ag(silver_searcher) vim bundle
 " bind a shorcut for using silver_search to search the word under cursor
 nmap <C-k> :Rg "\b<cword>\b" <CR>
 " wait for user input
-nmap <leader>s  :Rg 
+nmap <leader>s  :Rg
 
 " easy motion
 map  <Leader>f <Plug>(easymotion-bd-f)
 nmap <Leader>f <Plug>(easymotion-overwin-f)
-nmap <Leader>t :ClangFormat
+nmap <Leader>t :ClangFormat<CR>
+" rust
+"let g:rustfmt_autosave = 1
+" tag
+nmap <leader>e :Vista!!<CR>
+" close other window, If you use emacs, you know what I mean
+nmap <leader>1 :on<CR>
+" kill current window
+nmap <leader>0 :q<CR>
+
+
+autocmd FileType cpp          nnoremap <buffer> <Leader>t :ClangFormat<CR>
+autocmd FileType rust         nnoremap <buffer> <Leader>t :RustFmt<CR>
+autocmd FileType rust         nnoremap <buffer> <Leader>b :Cargo build<CR>
+autocmd FileType rust         nnoremap <buffer> <Leader>r :Cargo run<CR>
