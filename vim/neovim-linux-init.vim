@@ -192,6 +192,9 @@ nmap <leader>1 :on<CR>
 nmap <leader>0 :q<CR>
 
 
+autocmd FileType go          inoremap <buffer> <M-=> :=
+autocmd FileType go           nnoremap <buffer> <Leader>t :GoFmt<CR>
+autocmd FileType go           nnoremap <buffer> <Leader>m :GoImports<CR>
 autocmd FileType cpp          nnoremap <buffer> <Leader>t :ClangFormat<CR>
 autocmd FileType rust         nnoremap <buffer> <Leader>t :RustFmt<CR>
 autocmd FileType rust         nnoremap <buffer> <Leader>b :Cargo build<CR>
@@ -345,4 +348,12 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+
+inoremap <S-Insert> <ESC>"+p
+nnoremap <S-Insert> "+p
+nnoremap <M-*> <C-o>
+
+" golang related, don't be so smart, bitch!
+let g:go_fmt_autosave = 0
+let g:go_imports_autosave = 0
 
