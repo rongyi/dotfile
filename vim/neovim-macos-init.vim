@@ -34,6 +34,8 @@ Plug 'junegunn/fzf.vim'
 Plug 'jremmen/vim-ripgrep'
 Plug 'easymotion/vim-easymotion'
 Plug 'rhysd/vim-clang-format'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 
 " Initialize plugin system
 call plug#end()
@@ -44,7 +46,8 @@ call plug#end()
 " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
 " unicode characters in the file autoload/float.vim
 set encoding=utf-8
-
+set guifont=Fira\ Code:h14
+"set guifont=MonoLisa:h14
 " TextEdit might fail if hidden is not set.
 set hidden
 
@@ -74,6 +77,7 @@ endif
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
+" same as my emacs
 inoremap <silent><expr> <D-n>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
@@ -81,7 +85,6 @@ inoremap <silent><expr> <D-n>
 inoremap <expr><D-p> pumvisible() ? "\<C-p>" : "\<C-h>"
 let g:coc_snippet_next = '<D-j>'
 let g:coc_snippet_prev = '<D-k>'
-" same as my emacs
 inoremap <silent><expr> <TAB> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
 
 function! s:check_back_space() abort
@@ -255,7 +258,7 @@ set lbr
 " Don't reset cursor to start of line when moving around
 set nostartofline
 " without this setting, 7.4 is so slow
-set regexpengine=1
+set regexpengine=2
 
 " http://stackoverflow.com/questions/1005/getting-root-permissions-on-a-file-inside-of-vi
 cmap w!! w !sudo tee >/dev/null %
@@ -300,7 +303,7 @@ map <F7> :bprevious<CR>
 "quick quit
 nnoremap <silent><leader>z :wq<CR>
 "quick copy/paste, often you should select before
-map <leader>c "+y
+map <leader>y "+y
 map <leader>p "+p
 " delete all trailing spaces in all lines
 " nmap <leader><space> :call whitespace#strip_trailing()<CR>
@@ -326,7 +329,7 @@ colorscheme dracula
 let g:rainbow_active = 1
 
 " neovide
-let g:neovide_transparency=0.8
+let g:neovide_transparency=1
 let g:neovide_cursor_animation_length=0.13
 let g:neovide_cursor_trail_length=0.8
 let g:neovide_cursor_antialiasing=v:true
@@ -356,7 +359,29 @@ nmap <leader>1 :on<CR>
 nmap <leader>0 :q<CR>
 
 
+autocmd FileType go          inoremap <buffer> <M-=> :=
+autocmd FileType go           nnoremap <buffer> <Leader>t :GoFmt<CR>
+autocmd FileType go           nnoremap <buffer> <Leader>m :GoImports<CR>
 autocmd FileType cpp          nnoremap <buffer> <Leader>t :ClangFormat<CR>
 autocmd FileType rust         nnoremap <buffer> <Leader>t :RustFmt<CR>
 autocmd FileType rust         nnoremap <buffer> <Leader>b :Cargo build<CR>
 autocmd FileType rust         nnoremap <buffer> <Leader>r :Cargo run<CR>
+
+
+inoremap <S-Insert> <ESC>"+p
+nnoremap <S-Insert> "+p
+nnoremap <D-*> <C-o>
+
+" golang related, don't be so smart, bitch!
+let g:go_fmt_autosave = 0
+let g:go_imports_autosave = 0
+
+
+let g:gitgutter_sign_added = '█'
+let g:gitgutter_sign_modified = '█'
+highlight GitGutterAdd    guifg=#009900 ctermfg=2
+highlight GitGutterChange guifg=#bbbb00 ctermfg=3
+highlight GitGutterDelete guifg=#ff2222 ctermfg=1
+nmap <leader>l :set nu!<CR>
+
+let g:python3_host_prog = '/opt/homebrew/bin/python3'
