@@ -4,10 +4,16 @@
 call plug#begin('~/.vim/plugged')
 
 Plug 'neovim/nvim-lspconfig'
-Plug 'simrat39/rust-tools.nvim'
+"have start warnings
+"Plug 'simrat39/rust-tools.nvim'
+
+" Optional dependencies
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
+"Plug 'nvim-telescope/telescope.nvim'
+" Debugging (needs plenary from above as well)
 Plug 'mfussenegger/nvim-dap'
+" Plugin outside ~/.vim/plugged with post-update hook
 Plug 'Mofiqul/dracula.nvim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'jiangmiao/auto-pairs'
@@ -15,192 +21,49 @@ Plug 'liuchengxu/vista.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'fatih/vim-go'
 Plug 'tpope/vim-surround'
 Plug 'scrooloose/nerdcommenter'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
+" rainbow paren
 Plug 'luochen1990/rainbow'
 Plug 'rust-lang/rust.vim'
+
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'jremmen/vim-ripgrep'
 Plug 'easymotion/vim-easymotion'
 Plug 'rhysd/vim-clang-format'
+Plug 'honza/vim-snippets'
 
 " Initialize plugin system
 call plug#end()
 
 
+
+
 " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
 " unicode characters in the file autoload/float.vim
 set encoding=utf-8
-set guifont=Fira\ Code:h11
+set guifont=Fira\ Code:h10
 " TextEdit might fail if hidden is not set.
 set hidden
+
 " Some servers have issues with backup files, see #649.
 set nobackup
 set nowritebackup
+
 " Give more space for displaying messages.
 set cmdheight=2
+
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
 set updatetime=300
+
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
 
-
-
-
-set nocompatible      "don't make any effort to be compatible with vi
-set clipboard=unnamed "use system default clipboard
-set mousehide         "hide mouse when typing
-set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936
-set linespace=4
-set ruler             "show line info in status line
-set cursorline        "highlight current line
-set tabstop=2         " default indentation option
-set shiftwidth=2
-set softtabstop=2
-set expandtab
-set autoindent
-set autoread                   " auto update file content edited by another program at the same time
-set autowrite                  " Write on :next/:prev/^Z
-set swapfile                   " store tmp file in another place
-set backspace=indent,eol,start " backspace over pretty much anything
-set ignorecase                 " search option
-set incsearch
-set hlsearch
-set smartcase                  " UPPER case search only match upper case
-set list    " show trailing whitespace
-set listchars=tab:▸\ ,trail:▫
-set tags=./tags;/ "search tag file from current dir to root
-set showmatch " Hilight matching braces/paren/etc
-set shortmess+=A " Don't bother me when a swapfile exists
-
-
-" Make tab completion for files/buffers act like bash
-set wildmenu
-set wildignore+=*.o,*~,*.pyc,.git,node_modules  " Ignore certain files in tab-completion
-" Disable archive files
-set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz
-" Use emacs-style tab completion when selecting files, etc
-set wildmode=longest,list
-set wrap " Enable wrapping
-"set linebreak " Break long lines by word, not char
-"set showbreak=↪\  " Character to precede line wraps
-silent! set mouse=nvc       " Use the mouse, but not in insert mode
-" none of these should be word dividers, so make them not be
-set iskeyword+=_,$,@,%,#
-set formatoptions=l
-set lbr
-" Don't reset cursor to start of line when moving around
-set nostartofline
-" without this setting, 7.4 is so slow
-set regexpengine=2
-
-" http://stackoverflow.com/questions/1005/getting-root-permissions-on-a-file-inside-of-vi
-cmap w!! w !sudo tee >/dev/null %
-
-"leader setting
-let mapleader=','
-" in case miss type
-map Q <silent>
-map q: <silent>
-map K <silent>
-"a switch to disable hightlight search result
-nmap \q     :nohlsearch<CR>
-map  <C-s>  :w<CR>
-imap <C-s>  <ESC>:w<CR>a
-"like Intellij IDEA
-map  <C-F4> :wqall<CR>
-imap <C-F4> <ESC>:wqall<CR>
-" some emacs like key bindings
-imap <C-f>         <Right>
-imap <C-e>         <End>
-nmap <C-e>         <End>
-imap <C-b>         <Left>
-imap <C-a>         <ESC>I
-" plus 1 is pain in the ass
-nmap <C-a>         <ESC>^
-imap <A-x>         <ESC>:
-nmap <A-x>         <ESC>:
-imap <C-backspace> <C-w>
-inoremap <C-.> ->
-inoremap <M-.> ->
-" rust sugar
-inoremap <C-=> =>
-inoremap <M-=> =>
-inoremap <C-;> // 
-inoremap <M-;> // 
-"You should notice we use 'b' for mark anchor
-nmap     <C-l>         mbz.`b
-inoremap <C-l>         <ESC>mbz.`ba
-"tab switch shortcut
-map <F8> :bnext<CR>
-map <F7> :bprevious<CR>
-"quick quit
-nnoremap <silent><leader>z :wq<CR>
-"quick copy/paste, often you should select before
-map <leader>y "+y
-map <leader>p "+p
-" delete all trailing spaces in all lines
-" nmap <leader><space> :call whitespace#strip_trailing()<CR>
-" reselect visual block after indent
-vnoremap < <gv
-vnoremap > >gv
-
-" hide annoying quit message
-nnoremap <C-c> <C-c>:echo<cr>
-
-
-" ====== plug config =====
-" fzf
-nmap <leader>p :FZF<CR>
-colorscheme dracula
-" global rainbow mode
-let g:rainbow_active = 1
-
-" neovide
-let g:neovide_transparency=1
-let g:neovide_cursor_animation_length=0.13
-let g:neovide_cursor_trail_length=0.8
-let g:neovide_cursor_antialiasing=v:true
-let g:neovide_cursor_vfx_mode = "ripple"
-let g:neovide_remember_window_size = v:true
-" take my emacs config to here
-let g:neovide_input_use_logo = v:true
-
-
-" ag(silver_searcher) vim bundle
-" bind a shorcut for using silver_search to search the word under cursor
-nmap <C-k> :Rg "\b<cword>\b" <CR>
-" wait for user input
-nmap <leader>s  :Rg
-
-" easy motion
-map  <Leader>f <Plug>(easymotion-bd-f)
-nmap <Leader>f <Plug>(easymotion-overwin-f)
-nmap <Leader>t :ClangFormat<CR>
-" rust
-"let g:rustfmt_autosave = 1
-" tag
-nmap <leader>e :Vista!!<CR>
-" close other window, If you use emacs, you know what I mean
-nmap <leader>1 :on<CR>
-" kill current window
-nmap <leader>0 :q<CR>
-
-
-autocmd FileType go          inoremap <buffer> <M-=> :=
-autocmd FileType go           nnoremap <buffer> <Leader>t :GoFmt<CR>
-autocmd FileType go           nnoremap <buffer> <Leader>m :GoImports<CR>
-autocmd FileType cpp          nnoremap <buffer> <Leader>t :ClangFormat<CR>
-autocmd FileType rust         nnoremap <buffer> <Leader>t :RustFmt<CR>
-autocmd FileType rust         nnoremap <buffer> <Leader>b :Cargo build<CR>
-autocmd FileType rust         nnoremap <buffer> <Leader>r :Cargo run<CR>
-
-" coc config
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
 if has("nvim-0.5.0") || has("patch-8.1.1564")
@@ -210,21 +73,6 @@ else
   set signcolumn=yes
 endif
 
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-" disable M-n M-p in autopair
-let g:AutoPairsShortcutToggle = ''
-let g:AutoPairsShortcutJump = ''
-inoremap <silent><expr> <M-n>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><M-p> pumvisible() ? "\<C-p>" : "\<C-h>"
-let g:coc_snippet_next = '<M-j>'
-let g:coc_snippet_prev = '<M-k>'
-" same as my emacs
-inoremap <silent><expr> <TAB> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
 
 function! s:check_back_space() abort
   let col = col('.') - 1
@@ -349,6 +197,180 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
+
+
+
+set nocompatible      "don't make any effort to be compatible with vi
+set clipboard=unnamed "use system default clipboard
+set mousehide         "hide mouse when typing
+set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936
+set linespace=4
+set ruler             "show line info in status line
+set cursorline        "highlight current line
+set tabstop=2         " default indentation option
+set shiftwidth=2
+set softtabstop=2
+set expandtab
+set autoindent
+set autoread                   " auto update file content edited by another program at the same time
+set autowrite                  " Write on :next/:prev/^Z
+set swapfile                   " store tmp file in another place
+set backspace=indent,eol,start " backspace over pretty much anything
+set ignorecase                 " search option
+set incsearch
+set hlsearch
+set smartcase                  " UPPER case search only match upper case
+set list    " show trailing whitespace
+set listchars=tab:▸\ ,trail:▫
+set tags=./tags;/ "search tag file from current dir to root
+set showmatch " Hilight matching braces/paren/etc
+set shortmess+=A " Don't bother me when a swapfile exists
+
+
+" Make tab completion for files/buffers act like bash
+set wildmenu
+set wildignore+=*.o,*~,*.pyc,.git,node_modules  " Ignore certain files in tab-completion
+" Disable archive files
+set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz
+" Use emacs-style tab completion when selecting files, etc
+set wildmode=longest,list
+set wrap " Enable wrapping
+"set linebreak " Break long lines by word, not char
+"set showbreak=↪\  " Character to precede line wraps
+silent! set mouse=nvc       " Use the mouse, but not in insert mode
+" none of these should be word dividers, so make them not be
+set iskeyword+=_,$,@,%,#
+set formatoptions=l
+set lbr
+" Don't reset cursor to start of line when moving around
+set nostartofline
+" without this setting, 7.4 is so slow
+set regexpengine=2
+
+" http://stackoverflow.com/questions/1005/getting-root-permissions-on-a-file-inside-of-vi
+cmap w!! w !sudo tee >/dev/null %
+
+"leader setting
+let mapleader=','
+" in case miss type
+map Q <silent>
+map q: <silent>
+map K <silent>
+"a switch to disable hightlight search result
+nmap \q     :nohlsearch<CR>
+map  <C-s>  :w<CR>
+imap <C-s>  <ESC>:w<CR>a
+"like Intellij IDEA
+map  <C-F4> :wqall<CR>
+imap <C-F4> <ESC>:wqall<CR>
+" some emacs like key bindings
+imap <C-f>         <Right>
+imap <C-e>         <End>
+nmap <C-e>         <End>
+imap <C-b>         <Left>
+imap <C-a>         <ESC>I
+" plus 1 is pain in the ass
+nmap <C-a>         <ESC>^
+imap <M-x>         <ESC>:
+nmap <M-x>         <ESC>:
+imap <C-backspace> <C-w>
+inoremap <C-.> ->
+inoremap <M-.> ->
+" rust sugar
+inoremap <C-=> =>
+inoremap <M-=> =>
+inoremap <C-;> // 
+inoremap <M-;> // 
+"You should notice we use 'b' for mark anchor
+nmap     <C-l>         mbz.`b
+inoremap <C-l>         <ESC>mbz.`ba
+"tab switch shortcut
+map <F8> :bnext<CR>
+map <F7> :bprevious<CR>
+"quick quit
+nnoremap <silent><leader>z :wq<CR>
+"quick copy/paste, often you should select before
+map <leader>y "+y
+map <leader>p "+p
+" delete all trailing spaces in all lines
+" nmap <leader><space> :call whitespace#strip_trailing()<CR>
+" reselect visual block after indent
+vnoremap < <gv
+vnoremap > >gv
+
+" hide annoying quit message
+nnoremap <C-c> <C-c>:echo<cr>
+
+
+set autoread
+
+" ====== plug config =====
+
+" fzf
+nmap <leader>p :FZF<CR>
+
+colorscheme dracula
+
+
+" global rainbow mode
+let g:rainbow_active = 1
+
+" neovide
+let g:neovide_transparency=0.95
+let g:neovide_cursor_animation_length=0.13
+let g:neovide_cursor_trail_length=0.8
+let g:neovide_cursor_antialiasing=v:true
+let g:neovide_cursor_vfx_mode = "ripple"
+let g:neovide_remember_window_size = v:true
+" take my emacs config to here
+let g:neovide_input_use_logo = v:true
+
+
+" ag(silver_searcher) vim bundle
+" bind a shorcut for using silver_search to search the word under cursor
+nmap <C-k> :Rg "\b<cword>\b" <CR>
+" wait for user input
+nmap <leader>s  :Rg
+
+" easy motion
+map  <Leader>f <Plug>(easymotion-bd-f)
+nmap <Leader>f <Plug>(easymotion-overwin-f)
+nmap <Leader>t :ClangFormat<CR>
+" rust
+"let g:rustfmt_autosave = 1
+" tag
+nmap <leader>e :Vista!!<CR>
+" close other window, If you use emacs, you know what I mean
+nmap <leader>1 :on<CR>
+" kill current window
+nmap <leader>0 :q<CR>
+
+
+autocmd FileType go          inoremap <buffer> <M-=> :=
+autocmd FileType go           nnoremap <buffer> <Leader>t :GoFmt<CR>
+autocmd FileType go           nnoremap <buffer> <Leader>m :GoImports<CR>
+autocmd FileType cpp          nnoremap <buffer> <Leader>t :ClangFormat<CR>
+autocmd FileType rust         nnoremap <buffer> <Leader>t :RustFmt<CR>
+autocmd FileType rust         nnoremap <buffer> <Leader>b :Cargo build<CR>
+autocmd FileType rust         nnoremap <buffer> <Leader>r :Cargo run<CR>
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+" same as my emacs
+" disable this two M-n M-p, to make it in myway
+let g:AutoPairsShortcutJump = ''
+let g:AutoPairsShortcutToggle = ''
+inoremap <silent><expr> <M-n>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><M-p> pumvisible() ? "\<C-p>" : "\<C-h>"
+let g:coc_snippet_next = '<A-j>'
+let g:coc_snippet_prev = '<A-k>'
+inoremap <silent><expr> <TAB> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
+
+
 inoremap <S-Insert> <ESC>"+p
 nnoremap <S-Insert> "+p
 nnoremap <M-*> <C-o>
@@ -357,3 +379,11 @@ nnoremap <M-*> <C-o>
 let g:go_fmt_autosave = 0
 let g:go_imports_autosave = 0
 
+
+let g:gitgutter_sign_added = '█'
+let g:gitgutter_sign_modified = '█'
+highlight GitGutterAdd    guifg=#009900 ctermfg=2
+highlight GitGutterChange guifg=#bbbb00 ctermfg=3
+highlight GitGutterDelete guifg=#ff2222 ctermfg=1
+nmap <leader>l :set nu!<CR>
+imap <C-Enter> <ESC>o
