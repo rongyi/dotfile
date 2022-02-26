@@ -1,9 +1,9 @@
 {"rust-analyzer.server.path": "/usr/local/bin/rust-analyzer",
  "languageserver": {
     "ccls": {
-      "command": "/Users/coder/.emacs.d/ccls-wrapper.sh",
+      "command": "/home/coder/tmp/ccls/Release/ccls",
       "filetypes": ["c", "cpp", "cc"],
-      "rootPatterns": [".ccls", "compile_commands.json"],
+      "rootPatterns": [".ccls", "compile_commands.json", ".git"],
       "initializationOptions": {
         "cache": {
           "directory": ".ccls-cache"
@@ -13,6 +13,9 @@
         }
       }
     }
-  }
+  },
+  "diagnostic.errorSign": "💣",
+  "diagnostic.warningSign": "⚠️ ",
+  "suggest.snippetIndicator": "↩️"
 }
 
