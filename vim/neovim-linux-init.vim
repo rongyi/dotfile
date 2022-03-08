@@ -36,6 +36,7 @@ Plug 'jremmen/vim-ripgrep'
 Plug 'easymotion/vim-easymotion'
 Plug 'rhysd/vim-clang-format'
 Plug 'honza/vim-snippets'
+Plug 'tomlion/vim-solidity'
 
 " Initialize plugin system
 call plug#end()
@@ -210,7 +211,7 @@ set cursorline        "highlight current line
 set tabstop=2         " default indentation option
 set shiftwidth=2
 set softtabstop=2
-set expandtab
+"set expandtab
 set autoindent
 set autoread                   " auto update file content edited by another program at the same time
 set autowrite                  " Write on :next/:prev/^Z
@@ -307,8 +308,7 @@ set autoread
 " ====== plug config =====
 
 " fzf
-nmap <leader>p :FZF<CR>
-
+nmap <leader>p :GFiles<CR>
 colorscheme dracula
 
 
@@ -335,11 +335,11 @@ nmap <leader>s  :Rg
 " easy motion
 map  <Leader>f <Plug>(easymotion-bd-f)
 nmap <Leader>f <Plug>(easymotion-overwin-f)
-nmap <Leader>t :ClangFormat<CR>
 " rust
 "let g:rustfmt_autosave = 1
 " tag
 nmap <leader>e :Vista!!<CR>
+nmap \e :Vista!!<CR>
 " close other window, If you use emacs, you know what I mean
 nmap <leader>1 :on<CR>
 " kill current window
@@ -374,6 +374,7 @@ inoremap <silent><expr> <TAB> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<C
 inoremap <S-Insert> <ESC>"+p
 nnoremap <S-Insert> "+p
 nnoremap <M-*> <C-o>
+nnoremap <C-y> :tabnext<CR>
 
 " golang related, don't be so smart, bitch!
 let g:go_fmt_autosave = 0
@@ -387,3 +388,6 @@ highlight GitGutterChange guifg=#bbbb00 ctermfg=3
 highlight GitGutterDelete guifg=#ff2222 ctermfg=1
 nmap <leader>l :set nu!<CR>
 imap <C-Enter> <ESC>o
+
+
+
