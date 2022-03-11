@@ -211,7 +211,7 @@ set cursorline        "highlight current line
 set tabstop=2         " default indentation option
 set shiftwidth=2
 set softtabstop=2
-"set expandtab
+set expandtab
 set autoindent
 set autoread                   " auto update file content edited by another program at the same time
 set autowrite                  " Write on :next/:prev/^Z

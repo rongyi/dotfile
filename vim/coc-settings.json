@@ -15,7 +15,8 @@
     }
   },
   "diagnostic.errorSign": "💣",
-  "diagnostic.warningSign": "⚠️ ",
+  "diagnostic.warningSign": "⚠️",
+  "diagnostic.infoSign": "⚠️",
   "suggest.snippetIndicator": "↩️"
 }
 
