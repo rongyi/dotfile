@@ -388,6 +388,6 @@ highlight GitGutterChange guifg=#bbbb00 ctermfg=3
 highlight GitGutterDelete guifg=#ff2222 ctermfg=1
 nmap <leader>l :set nu!<CR>
 imap <C-Enter> <ESC>o
-
+imap <C-o> <ESC>O
 
 
