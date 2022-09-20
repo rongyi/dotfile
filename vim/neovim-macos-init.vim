@@ -9,7 +9,7 @@ Plug 'simrat39/rust-tools.nvim'
 " Optional dependencies
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
-"Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
 " Debugging (needs plenary from above as well)
 Plug 'mfussenegger/nvim-dap'
 " Plugin outside ~/.vim/plugged with post-update hook
@@ -35,6 +35,9 @@ Plug 'jremmen/vim-ripgrep'
 Plug 'easymotion/vim-easymotion'
 Plug 'rhysd/vim-clang-format'
 Plug 'honza/vim-snippets'
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'romgrk/barbar.nvim'
+Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
 
 " Initialize plugin system
 call plug#end()
@@ -179,8 +182,6 @@ let g:neovide_input_use_logo = v:true
 " ag(silver_searcher) vim bundle
 " bind a shorcut for using silver_search to search the word under cursor
 nmap <C-k> :Rg "\b<cword>\b" <CR>
-" wait for user input
-nmap <leader>s  :Rg
 
 " easy motion
 map  <Leader>f <Plug>(easymotion-bd-f)
@@ -398,3 +399,12 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
+
+
+
+" telescope
+" Find files using Telescope command-line sugar.
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>s <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
