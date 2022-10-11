@@ -1,5 +1,6 @@
-{"rust-analyzer.server.path": "/usr/local/bin/rust-analyzer",
- "languageserver": {
+{
+  "rust-analyzer.server.path": "/usr/local/bin/rust-analyzer",
+  "languageserver": {
     "ccls": {
       "command": "/Users/coder/.emacs.d/ccls-wrapper.sh",
       "filetypes": ["c", "cpp", "cc"],

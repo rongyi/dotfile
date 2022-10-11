@@ -186,7 +186,6 @@ nmap <C-k> :Rg "\b<cword>\b" <CR>
 " easy motion
 map  <Leader>f <Plug>(easymotion-bd-f)
 nmap <Leader>f <Plug>(easymotion-overwin-f)
-nmap <Leader>t :ClangFormat<CR>
 " rust
 "let g:rustfmt_autosave = 1
 " tag
@@ -404,7 +403,12 @@ nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 " telescope
 " Find files using Telescope command-line sugar.
-nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>p <cmd>Telescope find_files<cr>
 nnoremap <leader>s <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+
+
+let g:LanguageClient_serverCommands = {
+\ 'rust': ['rust-analyzer'],
+\ }
