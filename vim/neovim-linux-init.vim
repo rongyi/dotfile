@@ -10,7 +10,6 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'mfussenegger/nvim-dap'
 Plug 'Mofiqul/dracula.nvim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'jiangmiao/auto-pairs'
 Plug 'liuchengxu/vista.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'vim-airline/vim-airline'
@@ -29,7 +28,7 @@ Plug 'easymotion/vim-easymotion'
 Plug 'rhysd/vim-clang-format'
 Plug 'tomlion/vim-solidity'
 Plug 'jparise/vim-graphql'
-
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
 " Initialize plugin system
 call plug#end()
 
@@ -37,8 +36,7 @@ call plug#end()
 " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
 " unicode characters in the file autoload/float.vim
 set encoding=utf-8
-set guifont=Fira\ Code:h10
-set guifont=MonoLisa:h10
+set guifont=Fira\ Code:h11
 " TextEdit might fail if hidden is not set.
 set hidden
 " Some servers have issues with backup files, see #649.
@@ -129,8 +127,10 @@ nmap <C-a>         <ESC>^
 imap <A-x>         <ESC>:
 nmap <A-x>         <ESC>:
 imap <C-backspace> <C-w>
+" cpp golang sugar
 inoremap <C-.> ->
 inoremap <M-.> ->
+inoremap <M-<> <-
 " rust sugar
 inoremap <C-=> =>
 inoremap <M-=> =>
@@ -169,7 +169,7 @@ let g:neovide_transparency=1
 let g:neovide_cursor_animation_length=0.13
 let g:neovide_cursor_trail_length=0.8
 let g:neovide_cursor_antialiasing=v:true
-let g:neovide_cursor_vfx_mode = "pixiedust"
+let g:neovide_cursor_vfx_mode = "ripple"
 let g:neovide_remember_window_size = v:true
 " take my emacs config to here
 let g:neovide_input_use_logo = v:true
@@ -203,33 +203,66 @@ autocmd FileType rust         nnoremap <buffer> <Leader>t :RustFmt<CR>
 autocmd FileType rust         nnoremap <buffer> <Leader>b :Cargo build<CR>
 autocmd FileType rust         nnoremap <buffer> <Leader>r :Cargo run<CR>
 
-" coc config
-" Always show the signcolumn, otherwise it would shift the text each time
-" diagnostics appear/become resolved.
-if has("nvim-0.5.0") || has("patch-8.1.1564")
-  " Recently vim can merge signcolumn and number column into one
-  set signcolumn=number
-else
-  set signcolumn=yes
-endif
 
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-" disable M-n M-p in autopair
-let g:AutoPairsShortcutToggle = ''
-let g:AutoPairsShortcutJump = ''
-inoremap <silent><expr> <M-n>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><M-p> pumvisible() ? "\<C-p>" : "\<C-h>"
+" golang related, don't be so smart, bitch!
+let g:go_fmt_autosave = 0
+let g:go_imports_autosave = 0
+
+
+"map <C-e> :tabnext<CR>
+"map <C-y> :tabprevious<CR>
+" default open at tab
+" https://vi.stackexchange.com/questions/310/how-do-i-make-opening-new-tabs-the-default
+augroup open-tabs
+    au!
+    au VimEnter * ++nested if !&diff | tab all | tabfirst | endif
+augroup end
+
+
+
+let g:gitgutter_sign_added = '█'
+let g:gitgutter_sign_modified = '█'
+highlight GitGutterAdd    guifg=#009900 ctermfg=2
+highlight GitGutterChange guifg=#bbbb00 ctermfg=3
+highlight GitGutterDelete guifg=#ff2222 ctermfg=1
+nmap <leader>l :set nu!<CR>
+nmap <leader>r :History<CR>
+imap <C-Enter> <ESC>o
+imap <C-o> <ESC>O
+
+
+" coc config
+" Some servers have issues with backup files, see #649.
 let g:coc_snippet_next = '<M-j>'
 let g:coc_snippet_prev = '<M-k>'
-" same as my emacs
-inoremap <silent><expr> <TAB> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
+set nobackup
+set nowritebackup
 
-function! s:check_back_space() abort
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+" delays and poor user experience.
+set updatetime=300
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+set signcolumn=yes
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: There's always complete item selected by default, you may want to enable
+" no select by `"suggest.noselect": true` in your configuration file.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <M-n>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><M-p> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice.
+inoremap <silent><expr> <TAB> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
@@ -240,11 +273,6 @@ if has('nvim')
 else
   inoremap <silent><expr> <c-@> coc#refresh()
 endif
-
-" Make <CR> auto-select the first completion item and notify coc.nvim to
-" format on enter, <cr> could be remapped by other vim plugin
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
@@ -258,15 +286,13 @@ nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
 " Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+nnoremap <silent> K :call ShowDocumentation()<CR>
 
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
     call CocActionAsync('doHover')
   else
-    execute '!' . &keywordprg . " " . expand('<cword>')
+    call feedkeys('K', 'in')
   endif
 endfunction
 
@@ -298,6 +324,9 @@ nmap <leader>ac  <Plug>(coc-codeaction)
 " Apply AutoFix to problem on the current line.
 nmap <leader>qf  <Plug>(coc-fix-current)
 
+" Run the Code Lens action on the current line.
+nmap <leader>cl  <Plug>(coc-codelens-action)
+
 " Map function and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
 xmap if <Plug>(coc-funcobj-i)
@@ -325,14 +354,18 @@ nmap <silent> <C-s> <Plug>(coc-range-select)
 xmap <silent> <C-s> <Plug>(coc-range-select)
 
 " Add `:Format` command to format current buffer.
-command! -nargs=0 Format :call CocAction('format')
+command! -nargs=0 Format :call CocActionAsync('format')
 
 " Add `:Fold` command to fold current buffer.
 command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 
 " Add `:OR` command for organize imports of the current buffer.
-command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
 
+" Add (Neo)Vim's native statusline support.
+" NOTE: Please see `:h coc-status` for integrations with external plugins that
+" provide custom statusline: lightline.vim, vim-airline.
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 " Mappings for CoCList
 " Show all diagnostics.
@@ -351,35 +384,3 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
-
-inoremap <S-Insert> <ESC>"+p
-nnoremap <S-Insert> "+p
-nnoremap <M-*> <C-o>
-nnoremap <C-y> :tabnext<CR>
-
-" golang related, don't be so smart, bitch!
-let g:go_fmt_autosave = 0
-let g:go_imports_autosave = 0
-
-
-"map <C-e> :tabnext<CR>
-"map <C-y> :tabprevious<CR>
-" default open at tab
-" https://vi.stackexchange.com/questions/310/how-do-i-make-opening-new-tabs-the-default
-augroup open-tabs
-    au!
-    au VimEnter * ++nested if !&diff | tab all | tabfirst | endif
-augroup end
-
-
-
-let g:gitgutter_sign_added = '█'
-let g:gitgutter_sign_modified = '█'
-highlight GitGutterAdd    guifg=#009900 ctermfg=2
-highlight GitGutterChange guifg=#bbbb00 ctermfg=3
-highlight GitGutterDelete guifg=#ff2222 ctermfg=1
-nmap <leader>l :set nu!<CR>
-imap <C-Enter> <ESC>o
-imap <C-o> <ESC>O
-" open terminal for some quick action
-nmap <F2> :sp<CR>:term<CR>A<CR>
