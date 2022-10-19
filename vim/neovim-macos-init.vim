@@ -18,8 +18,8 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'jiangmiao/auto-pairs'
 Plug 'liuchengxu/vista.vim'
 Plug 'scrooloose/nerdtree'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+"Plug 'vim-airline/vim-airline'
+"Plug 'vim-airline/vim-airline-themes'
 Plug 'fatih/vim-go'
 Plug 'tpope/vim-surround'
 Plug 'scrooloose/nerdcommenter'
@@ -38,7 +38,13 @@ Plug 'honza/vim-snippets'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'romgrk/barbar.nvim'
 Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
-
+Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'm-demare/hlargs.nvim'
+Plug 'nvim-lualine/lualine.nvim'
+" If you want to have icons in your statusline choose one of these
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'RRethy/vim-illuminate'
+Plug 'rmagatti/goto-preview'
 " Initialize plugin system
 call plug#end()
 
@@ -405,6 +411,7 @@ nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 " Find files using Telescope command-line sugar.
 nnoremap <leader>p <cmd>Telescope find_files<cr>
 nnoremap <leader>s <cmd>Telescope live_grep<cr>
+nnoremap <leader>e :<C-u>CocList outline<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
@@ -412,3 +419,14 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 let g:LanguageClient_serverCommands = {
 \ 'rust': ['rust-analyzer'],
 \ }
+
+lua << END
+require('lualine').setup {
+  options = { theme = 'dracula' },
+}
+
+require('goto-preview').setup {
+  default_mappings = true,
+}
+
+END
