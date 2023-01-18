@@ -45,6 +45,7 @@ Plug 'nvim-lualine/lualine.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'RRethy/vim-illuminate'
 Plug 'rmagatti/goto-preview'
+Plug 'chriskempson/base16-vim'
 " Initialize plugin system
 call plug#end()
 
@@ -135,6 +136,7 @@ nmap <A-x>         <ESC>:
 imap <C-backspace> <C-w>
 inoremap <C-.> ->
 inoremap <D-.> ->
+inoremap <D-,> <-
 " rust sugar
 inoremap <C-=> =>
 inoremap <D-=> =>
@@ -168,7 +170,8 @@ set autoread
 " fzf
 nmap <leader>p :Files<CR>
 
-colorscheme dracula
+colorscheme base16-dracula
+"colorscheme base16-tomorrow
 
 
 " global rainbow mode
@@ -190,12 +193,12 @@ let g:neovide_input_use_logo = v:true
 nmap <C-k> :Rg "\b<cword>\b" <CR>
 
 " easy motion
-map  <Leader>f <Plug>(easymotion-bd-f)
-nmap <Leader>f <Plug>(easymotion-overwin-f)
+map  <Leader>q <Plug>(easymotion-bd-f)
+nmap <Leader>q <Plug>(easymotion-overwin-f)
 " rust
 "let g:rustfmt_autosave = 1
 " tag
-nmap <leader>e :GoDecls<CR>
+map <leader>e :GoDecls<CR>
 " close other window, If you use emacs, you know what I mean
 nmap <leader>1 :on<CR>
 " kill current window
@@ -229,7 +232,7 @@ let g:coc_snippet_prev = '<D-k>'
 inoremap <S-Insert> <ESC>"+p
 nnoremap <S-Insert> "+p
 nnoremap <D-*> <C-o>
-nnoremap <C-y> :tabnext<CR>
+nnoremap <C-y> :BufferNext<CR>
 
 " golang related, don't be so smart, bitch!
 let g:go_fmt_autosave = 0
