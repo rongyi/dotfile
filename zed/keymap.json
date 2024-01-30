@@ -1,0 +1,15 @@
+[
+  {
+    "context": "ProjectPanel",
+    "bindings": {
+      "cmd-n": "zed::NoAction"
+    }
+  },
+  {
+    "context": "Editor && (showing_code_actions || showing_completions)",
+    "bindings": {
+      "cmd-p": "editor::ContextMenuPrev",
+      "cmd-n": "editor::ContextMenuNext"
+    }
+  }
+]
