@@ -1,8 +1,34 @@
 [
   {
+    "bindings": {
+      "ctrl-cmd-p": "editor::FindAllReferences"
+    }
+  },
+  {
     "context": "ProjectPanel",
     "bindings": {
       "cmd-n": "zed::NoAction"
+    }
+  },
+  {
+    "context": "Editor && vim_mode == normal",
+    "bindings": {
+      "ctrl-a": "editor::MoveToBeginningOfLine",
+      "ctrl-e": "editor::MoveToEndOfLine"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "cmd-;": "editor::ToggleComments",
+      "ctrl-t": "zed::NoAction",
+      "ctrl-w": "editor::DeleteToPreviousSubwordStart"
+    }
+  },
+  {
+    "context": "Pane",
+    "bindings": {
+      "ctrl-t": "pane::GoBack"
     }
   },
   {
@@ -10,6 +36,12 @@
     "bindings": {
       "cmd-p": "editor::ContextMenuPrev",
       "cmd-n": "editor::ContextMenuNext"
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "ctrl-cmd-y": "terminal_panel::ToggleFocus"
     }
   }
 ]

@@ -10,10 +10,47 @@
   "features": {
     "copilot": false
   },
-  "theme": "One Dark",
-  "base_keymap": "JetBrains",
+  "theme": "Solarized Light",
+  "base_keymap": "VSCode",
   "vim_mode": true,
   "ui_font_size": 16,
   "buffer_font_size": 16,
-  "ui_font_family": "MonoLisa"
+  "ui_font_family": "PragmataPro",
+  "buffer_font_family": "MonoLisa",
+  "format_on_save": "off",
+  "inlay_hints": {
+    "enabled": true,
+    "show_type_hints": true,
+    "show_parameter_hints": true,
+    "show_other_hints": true
+  },
+  "lsp": {
+    "rust-analyzer": {
+      "initialization_options": {
+        "inlayHints": {
+          "maxLength": null,
+          "lifetimeElisionHints": {
+            "useParameterNames": true,
+            "enable": "true"
+          },
+          "closureReturnTypeHints": {
+            "enable": "always"
+          }
+        }
+      }
+    },
+    "gopls": {
+      "initialization_options": {
+        "hints": {
+          "assignVariableTypes": true,
+          "compositeLiteralFields": true,
+          "compositeLiteralTypes": true,
+          "constantValues": true,
+          "functionTypeParameters": true,
+          "parameterNames": true,
+          "rangeVariableTypes": true
+        }
+      }
+    }
+  }
 }
