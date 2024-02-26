@@ -1,7 +1,8 @@
 [
   {
     "bindings": {
-      "ctrl-cmd-p": "editor::FindAllReferences"
+      "ctrl-cmd-p": "editor::FindAllReferences",
+      "f1": "workspace::ToggleZoom"
     }
   },
   {
@@ -22,13 +23,21 @@
     "bindings": {
       "cmd-;": "editor::ToggleComments",
       "ctrl-t": "zed::NoAction",
-      "ctrl-w": "editor::DeleteToPreviousSubwordStart"
+      "ctrl-w": "editor::DeleteToPreviousSubwordStart",
+      "ctrl-cmd-e": "editor::GoToDiagnostic"
+    }
+  },
+  {
+    "context": "Editor && mode == full",
+    "bindings": {
+      "cmd-e": "outline::Toggle"
     }
   },
   {
     "context": "Pane",
     "bindings": {
-      "ctrl-t": "pane::GoBack"
+      "ctrl-t": "pane::GoBack",
+      "cmd-1": "pane::CloseInactiveItems"
     }
   },
   {

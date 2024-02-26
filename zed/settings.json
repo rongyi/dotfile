@@ -10,7 +10,7 @@
   "features": {
     "copilot": false
   },
-  "theme": "Solarized Light",
+  "theme": "Dracula",
   "base_keymap": "VSCode",
   "vim_mode": true,
   "ui_font_size": 16,
